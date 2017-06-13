@@ -5,6 +5,8 @@
  */
 package transportadoraifes;
 
+import controlador.CtrlCliente;
+
 /**
  *
  * @author Igor Ferrani
@@ -14,8 +16,11 @@ public class TransportadoraIfes {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
+    public static void main(String[] args) throws Exception {
+        CtrlCliente ctrlCliente = new CtrlCliente();
+        if(ctrlCliente.novoCliente().get("success") == "ok"){
+            System.out.println(ctrlCliente.novoCliente().get("message"));
+        }
     }
     
 }
