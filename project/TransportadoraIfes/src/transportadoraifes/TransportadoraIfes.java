@@ -5,7 +5,7 @@
  */
 package transportadoraifes;
 
-import controlador.CtrlCliente;
+import Controller.CtrlCliente;
 
 /**
  *

@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package persistencia;
-
-import Model.Cliente;
+package Controller;
 
 /**
  *
  * @author Igor Ferrani
  */
-public class ClientePersistencia {
-    
-    public boolean insereCliente(Cliente cliente){
-        return true;
+public class CtrlCaminhao {
+
+    public void novoCaminhao(double qtdVolumeCaminhao, double qtdPesoCaminhao, String numLicencaCaminhao) {
+        
     }
+    
 }
