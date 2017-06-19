@@ -13,6 +13,7 @@ public class Remessa {
     private int codRemessa;
     private int codViagem;
     private int codDeposito;
+    private String numRemessa;
 
     public int getCodRemessa() {
         return codRemessa;
@@ -36,5 +37,13 @@ public class Remessa {
 
     public void setCodDeposito(int codDeposito) {
         this.codDeposito = codDeposito;
+    }
+    
+    public String getNumRemessa() {
+        return numRemessa;
+    }
+
+    public void setNumRemessa(String numRemessa) {
+        this.numRemessa = numRemessa;
     }
 }

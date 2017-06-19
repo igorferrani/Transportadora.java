@@ -11,7 +11,6 @@ package Model;
  */
 public class Produto {
     private int codProduto;
-    private int codItemRemessa;
     private int numProduto;
     private double valProduto;
     private double qtdPesoProduto;
@@ -22,14 +21,6 @@ public class Produto {
 
     public void setCodProduto(int codProduto) {
         this.codProduto = codProduto;
-    }
-
-    public int getCodItemRemessa() {
-        return codItemRemessa;
-    }
-
-    public void setCodItemRemessa(int codItemRemessa) {
-        this.codItemRemessa = codItemRemessa;
     }
 
     public int getNumProduto() {

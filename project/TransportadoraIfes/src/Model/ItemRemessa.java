@@ -12,6 +12,7 @@ package Model;
 public class ItemRemessa {
     private int codItemRemessa;
     private int codRemessa;
+    private double qtdProduto;
 
     public int getCodItemRemessa() {
         return codItemRemessa;
@@ -27,5 +28,13 @@ public class ItemRemessa {
 
     public void setCodRemessa(int codRemessa) {
         this.codRemessa = codRemessa;
+    }
+    
+    public double getQtdProduto() {
+        return qtdProduto;
+    }
+
+    public void setQtdProduto(double qtdProduto) {
+        this.qtdProduto = qtdProduto;
     }
 }
