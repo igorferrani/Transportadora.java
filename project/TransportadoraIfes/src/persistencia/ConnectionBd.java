@@ -38,8 +38,13 @@ public class ConnectionBd {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             
+            /*String host = "mysql.hostinger.com.br";
+            String dbname = "u576395086_trans";
+            String user = "u576395086_ifes";
+            String password = "1q2w!Q@W";*/
+            
             String host = "localhost";
-            String dbname = "mysql";
+            String dbname = "transportadora";
             String user = "root";
             String password = "";
             
@@ -59,6 +64,6 @@ public class ConnectionBd {
         } catch (Exception e) {
             System.out.println(">> Error Exception (getConnection): " + e.getMessage());
         }
-        return null;
+        return con;
     }
 }
