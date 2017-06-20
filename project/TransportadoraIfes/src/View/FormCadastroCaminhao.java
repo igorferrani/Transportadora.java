@@ -6,7 +6,9 @@
 package View;
 
 import Model.Caminhao;
+import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import persistencia.CaminhaoPersistencia;
 
 /**
@@ -20,6 +22,7 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
      */
     public FormCadastroCaminhao() {
         initComponents();
+        updateTable();
     }
 
     /**
@@ -120,6 +123,22 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        tableCaminhao.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Código", "Qtd. Volume", "Qtd. Peso", "Licença"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tableCaminhao);
 
         jLabel4.setText("Listagem de veículos");
@@ -182,14 +201,38 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
         caminhao.setQtdVolumeCaminhao(qtdVolumeCaminhao);
         caminhao.setQtdPesoCaminhao(qtdPesoCaminhao);
         caminhao.setNumLicencaCaminhao(numLicencaCaminhao);
+        
         try {
             caminhaoPersistencia.insertRecord(caminhao);
             JOptionPane.showMessageDialog(null, "Caminhao inserido com sucesso !");
         } catch (Exception e){
             JOptionPane.showMessageDialog(null, "Não foi possível inserir o caminhão.");
         }
+        
+        updateTable();
     }//GEN-LAST:event_btnAdicionarCaminhaoActionPerformed
 
+    private void updateTable(){        
+        DefaultTableModel model = (DefaultTableModel)tableCaminhao.getModel();        
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();        
+        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia(); 
+        try{                    
+            ArrayList<Caminhao> listaVeiculos  = caminhaoPersistencia.selectAllRecords();
+            for(int i=0;i < listaVeiculos.size();i++){
+                Caminhao item = listaVeiculos.get(i);
+                model.addRow( new Object[] { 
+                    item.getCodCaminhao() , 
+                    item.getQtdVolumeCaminhao(),
+                    item.getQtdPesoCaminhao(),
+                    item.getNumLicencaCaminhao(),
+                });
+            }            
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
+    
     private void btnRemoverCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverCaminhaoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRemoverCaminhaoActionPerformed

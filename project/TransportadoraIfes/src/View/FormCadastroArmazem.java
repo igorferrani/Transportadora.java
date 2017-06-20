@@ -5,7 +5,10 @@
  */
 package View;
 
-import Model.Caminhao;
+import Model.Armazem;
+import java.util.ArrayList;
+import javax.swing.table.DefaultTableModel;
+import persistencia.ArmazemPersistencia;
 
 /**
  *
@@ -18,6 +21,7 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
      */
     public FormCadastroArmazem() {
         initComponents();
+        updateTable();
     }
 
     /**
@@ -35,7 +39,7 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
         inputNumLicencaCaminhao1 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableArmazem = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         btnRemoverCaminhao = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -103,15 +107,23 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableArmazem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Título 1", "Título 2", "Título 3", "Título 4"
+                "Código", "Nome"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tableArmazem);
 
         jLabel4.setText("Listagem de armazens");
 
@@ -263,6 +275,25 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
             }
         });
     }
+    
+    private void updateTable(){        
+        DefaultTableModel model = (DefaultTableModel)tableArmazem.getModel();        
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();        
+        ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia(); 
+        try{                    
+            ArrayList<Armazem> lista  = armazemPersistencia.selectAllRecords();
+            for(int i=0;i < lista.size();i++){
+                Armazem item = lista.get(i);
+                model.addRow( new Object[] { 
+                    item.getCodArmazem() , 
+                    item.getNomArmazem(),
+                });
+            }            
+        } catch(Exception ex){
+            System.out.println(ex.getMessage());
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRemoverCaminhao;
@@ -279,8 +310,8 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tableArmazem;
     // End of variables declaration//GEN-END:variables
 }

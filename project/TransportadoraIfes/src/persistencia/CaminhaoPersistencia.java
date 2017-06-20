@@ -6,7 +6,6 @@
 package persistencia;
 
 import Model.Caminhao;
-import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,21 +16,6 @@ import java.util.ArrayList;
  * @author Igor Ferrani
  */
 public class CaminhaoPersistencia {
-    
-    public static void main(String[] args){
-        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
-        Caminhao caminhao = new Caminhao();
-        
-        caminhao.setQtdVolumeCaminhao(12);
-        caminhao.setQtdPesoCaminhao(23);
-        caminhao.setNumLicencaCaminhao("A");
-        
-        try {
-            caminhaoPersistencia.insertRecord(caminhao);
-        } catch (Exception e){
-            
-        }
-    }
     
     public boolean insertRecord(Caminhao caminhao) throws Exception{
         Statement stmt = null;
@@ -77,6 +61,7 @@ public class CaminhaoPersistencia {
             
             while(rs.next()){
                 Caminhao caminhao = new Caminhao();
+                caminhao.setCodCaminhao(rs.getInt("codCaminhao"));
                 caminhao.setQtdVolumeCaminhao(rs.getDouble("qtdVolumeCaminhao"));
                 caminhao.setQtdPesoCaminhao(rs.getDouble("qtdPesoCaminhao"));
                 caminhao.setNumLicencaCaminhao(rs.getString("numLicencaCaminhao"));
