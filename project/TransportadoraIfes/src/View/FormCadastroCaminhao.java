@@ -6,6 +6,8 @@
 package View;
 
 import Model.Caminhao;
+import javax.swing.*;
+import persistencia.CaminhaoPersistencia;
 
 /**
  *
@@ -38,7 +40,7 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         btnAdicionarCaminhao = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableCaminhao = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         btnRemoverCaminhao = new javax.swing.JButton();
 
@@ -118,15 +120,7 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Título 1", "Título 2", "Título 3", "Título 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableCaminhao);
 
         jLabel4.setText("Listagem de veículos");
 
@@ -184,12 +178,16 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
         String numLicencaCaminhao = (String) inputNumLicencaCaminhao.getText();
         
         Caminhao caminhao = new Caminhao();
-        //PersistenciaCaminhao persistenciaCaminhao = new PersistenciaCaminhao();
+        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
         caminhao.setQtdVolumeCaminhao(qtdVolumeCaminhao);
         caminhao.setQtdPesoCaminhao(qtdPesoCaminhao);
         caminhao.setNumLicencaCaminhao(numLicencaCaminhao);
-        
-        //persistenciaCaminhao.insereCaminhao(caminhao);
+        try {
+            caminhaoPersistencia.insertRecord(caminhao);
+            JOptionPane.showMessageDialog(null, "Caminhao inserido com sucesso !");
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "Não foi possível inserir o caminhão.");
+        }
     }//GEN-LAST:event_btnAdicionarCaminhaoActionPerformed
 
     private void btnRemoverCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverCaminhaoActionPerformed
@@ -243,6 +241,6 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tableCaminhao;
     // End of variables declaration//GEN-END:variables
 }
