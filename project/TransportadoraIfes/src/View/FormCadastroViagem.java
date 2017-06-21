@@ -5,7 +5,10 @@
  */
 package View;
 
-import Model.Caminhao;
+import Model.Armazem;
+import java.util.ArrayList;
+import javax.swing.JComboBox;
+import persistencia.ArmazemPersistencia;
 
 /**
  *
@@ -18,6 +21,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
      */
     public FormCadastroViagem() {
         initComponents();
+        init();
     }
 
     /**
@@ -30,13 +34,13 @@ public class FormCadastroViagem extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        inputArmazem = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        btnAdicionarRemessa = new javax.swing.JButton();
         btnRemoverCaminhao = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -56,7 +60,12 @@ public class FormCadastroViagem extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações da viagem"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        inputArmazem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        inputArmazem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputArmazemActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Armazem (origem)");
 
@@ -71,10 +80,10 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jList1);
 
-        jButton1.setText("Adicionar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAdicionarRemessa.setText("Adicionar");
+        btnAdicionarRemessa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAdicionarRemessaActionPerformed(evt);
             }
         });
 
@@ -124,7 +133,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAdicionarRemessa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnRemoverCaminhao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -146,7 +155,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inputArmazem, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14)
                         .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -164,7 +173,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputArmazem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(32, 32, 32)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -183,7 +192,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnAdicionarRemessa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -243,9 +252,10 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRemoverCaminhaoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new FormCadastroRemessa().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnAdicionarRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarRemessaActionPerformed
+        //JComboBox armazem = (JComboBox) inputArmazem.getSelectedItem();
+        System.out.println(inputArmazem.getSelectedIndex());
+    }//GEN-LAST:event_btnAdicionarRemessaActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
@@ -259,6 +269,38 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void inputArmazemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputArmazemActionPerformed
+        
+    }//GEN-LAST:event_inputArmazemActionPerformed
+
+    public void init(){
+        inputArmazem.removeAllItems();
+        try {
+            setSelectArmazem(inputArmazem);
+        } catch(Exception e){
+
+        }
+    }
+
+    
+    public ArrayList setSelectArmazem(JComboBox<String> inputArmazem) throws Exception{
+        ArrayList<Armazem> list = null;
+        ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia();
+        try {
+            list = armazemPersistencia.selectAllRecords();
+            for(int i=0;i < list.size();i++){
+                Armazem item = list.get(i);
+                inputArmazem.addItem(item.getNomArmazem());
+                //DefaultComboBoxModel<Item> itemModel = new DefaultComboBoxModel<>();
+                //itemModel.addElement(new Item(item.getCodArmazem(), item.getNomArmazem()));
+            }
+        } catch(Exception e){
+            throw new Exception(">> Error: "+e.getMessage());
+        }
+        return list;
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -293,17 +335,18 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new FormCadastroViagem().setVisible(true);
+                new FormCadastroViagem().init();
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdicionarRemessa;
     private javax.swing.JButton btnCancelarRemessa;
     private javax.swing.JButton btnRemoverCaminhao;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> inputArmazem;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
