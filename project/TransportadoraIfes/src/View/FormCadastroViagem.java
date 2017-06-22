@@ -7,11 +7,10 @@ package View;
 
 import Controller.CtrlArmazem;
 import Controller.CtrlCaminhao;
-import Model.Armazem;
+import Controller.CtrlViagem;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.swing.JComboBox;
-import persistencia.ArmazemPersistencia;
+import transportadoraifes.Item;
 import transportadoraifes.Util;
 
 /**
@@ -73,7 +72,11 @@ public class FormCadastroViagem extends javax.swing.JFrame {
 
         jLabel1.setText("Armazem (origem)");
 
-        inputCaminhao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        inputCaminhao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputCaminhaoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Caminhão");
 
@@ -262,7 +265,16 @@ public class FormCadastroViagem extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAdicionarRemessaActionPerformed
 
     private void btnSalvarAlteracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarAlteracoesActionPerformed
-        System.out.println(inputCaminhao.getSelectedIndex());
+        Item caminhao = inputCaminhao.getItemAt(inputCaminhao.getSelectedIndex());
+        
+        try {
+            CtrlViagem ctrlViagem = new CtrlViagem();
+            ctrlViagem.
+        } catch (Exception e){
+            
+        }
+        
+        System.out.println(caminhao.getId());
     }//GEN-LAST:event_btnSalvarAlteracoesActionPerformed
 
     private void btnCancelarRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRemessaActionPerformed
@@ -276,6 +288,10 @@ public class FormCadastroViagem extends javax.swing.JFrame {
     private void inputArmazemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputArmazemActionPerformed
         
     }//GEN-LAST:event_inputArmazemActionPerformed
+
+    private void inputCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCaminhaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputCaminhaoActionPerformed
 
     public void init(){
         inputArmazem.removeAllItems();
@@ -297,7 +313,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         }
     }
     
-    public void setSelectCaminhao(JComboBox<String> inputCaminhao){
+    public void setSelectCaminhao(JComboBox<Item> inputCaminhao){
         CtrlCaminhao ctrlCaminhao = new CtrlCaminhao();
         try {
             ctrlCaminhao.setComboBox(inputCaminhao);
@@ -353,7 +369,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
     private javax.swing.JButton btnRemoverCaminhao;
     private javax.swing.JButton btnSalvarAlteracoes;
     private javax.swing.JComboBox<String> inputArmazem;
-    private javax.swing.JComboBox<String> inputCaminhao;
+    private javax.swing.JComboBox<Item> inputCaminhao;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

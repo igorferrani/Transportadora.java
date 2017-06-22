@@ -46,4 +46,8 @@ public class Armazem {
     public void setNomArmazem(String nomArmazem) {
         this.nomArmazem = nomArmazem;
     }
+    
+    public String toString(){
+        return this.nomArmazem;
+    }
 }

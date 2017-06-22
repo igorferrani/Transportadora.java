@@ -5,12 +5,14 @@
  */
 package Controller;
 
+import Model.Armazem;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import persistencia.ArmazemPersistencia;
 import persistencia.ConnectionBd;
+import transportadoraifes.Item;
 
 /**
  *
@@ -28,7 +30,7 @@ public class CtrlArmazem {
         try {
             rs  = armazemPersistencia.selectAllRecords(con);
             while(rs.next()){
-                inputSelect.addItem(rs.getString("nomArmazem"));
+                inputSelect.addItem(new Item(rs.getInt("codArmazem"), rs.getString("nomArmazem")));
             }
             rs.close();
             con.close();
