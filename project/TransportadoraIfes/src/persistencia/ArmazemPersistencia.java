@@ -5,11 +5,9 @@
  */
 package persistencia;
 
-import Model.Armazem;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,35 +15,16 @@ import java.util.ArrayList;
  */
 public class ArmazemPersistencia {
     
-    public ArrayList selectAllRecords() throws Exception{
-        Statement stmt = null;
-        java.sql.Connection con = null;
-        ArrayList list = new ArrayList();
-        try {
-            ConnectionBd connectionBd = new ConnectionBd();
-            con = connectionBd.getConnection();
-            
+    public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
+        try {            
             String sql = "SELECT * FROM armazem";
-            
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            
-            while(rs.next()){
-                Armazem armazem = new Armazem();
-                armazem.setCodArmazem(rs.getInt("codArmazem"));
-                armazem.setNomArmazem(rs.getString("nomArmazem"));
-                list.add(armazem);
-            }
-            rs.close();
-            stmt.close();
-            con.close();
-            
-            return list;
-            
+            return rs;
         } catch (SQLException e){
-            throw new Exception(">> Error SQLException (ArmazemPersistencia): " + e.getMessage());
+            throw new Exception("Error SQLException ("+getClass().getName()+"): " + e.getMessage());
         } catch (Exception e){
-            throw new Exception(">> Error Exception (ArmazemPersistencia): " + e.getMessage());
+            throw new Exception("Error Exception ("+getClass().getName()+"): " + e.getMessage());
         }
     }
 }
