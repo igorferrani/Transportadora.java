@@ -9,6 +9,7 @@ import Controller.CtrlArmazem;
 import Controller.CtrlCaminhao;
 import Controller.CtrlViagem;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JComboBox;
 import transportadoraifes.Item;
 import transportadoraifes.Util;
@@ -266,10 +267,10 @@ public class FormCadastroViagem extends javax.swing.JFrame {
 
     private void btnSalvarAlteracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarAlteracoesActionPerformed
         Item caminhao = inputCaminhao.getItemAt(inputCaminhao.getSelectedIndex());
-        
+        ArrayList arrViagem = new ArrayList();
         try {
             CtrlViagem ctrlViagem = new CtrlViagem();
-            ctrlViagem.
+            ctrlViagem.insertRecord(arrViagem);
         } catch (Exception e){
             
         }

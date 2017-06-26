@@ -12,7 +12,16 @@ package Model;
 public class ItemRemessa {
     private int codItemRemessa;
     private int codRemessa;
+    private int codProduto;
     private double qtdProduto;
+
+    public int getCodProduto() {
+        return codProduto;
+    }
+
+    public void setCodProduto(int codProduto) {
+        this.codProduto = codProduto;
+    }
 
     public int getCodItemRemessa() {
         return codItemRemessa;
