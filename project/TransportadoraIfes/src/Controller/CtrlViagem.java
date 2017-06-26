@@ -5,11 +5,14 @@
  */
 package Controller;
 
+import Model.ItemRemessa;
 import Model.Remessa;
 import Model.Viagem;
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import persistencia.ConnectionBd;
+import persistencia.ItemRemessaPersistencia;
+import persistencia.RemessaPersistencia;
+import persistencia.ViagemPersistencia;
 
 /**
  *
@@ -32,60 +35,56 @@ public class CtrlViagem {
             
             con.setAutoCommit(false); //transaction block start
             
-            String insertViagem = "INSERT INTO viagem VALUES(0, ?, ?, ?, ?, ?)";
-            PreparedStatement stmt = con.prepareStatement(insertViagem);
-            stmt.setInt(1, codArmazem);
-            stmt.setInt(2, codCaminhao);
-            stmt.setInt(3, numViagem);
-            stmt.setDouble(4, 0);
-            stmt.setDouble(5, 0);
-            stmt.executeUpdate();
+            // Insere a viagem
+            ViagemPersistencia viagemPersistencia = new ViagemPersistencia();
+            viagemPersistencia.insertRecord(viagem, con);
             
             // Chamar metodo para buscar o ultimo ID de remessa inserido
             int codViagem = 10;
 
             /* INSERCAO DAS REMESSAS */
-            while(codViagem == 10){    
-                String numRemessa = "REM_002";
-                int codDeposito = 43;
+            while(codViagem == 10){
+                Remessa remessa = new Remessa();
+                remessa.setNumRemessa("REM_002");
+                remessa.setCodDeposito(43);
+                remessa.setCodViagem(codViagem);
                 
-                String insertRemessa = "INSERT INTO remessa VALUES(0, ?, ?)";
-                stmt = con.prepareStatement(insertRemessa);
-                stmt.setInt(1, codViagem);
-                stmt.setInt(2, codDeposito);
-                stmt.setString(3, numRemessa);
-                stmt.executeUpdate();
+                // Insere a remessa
+                RemessaPersistencia remessaPersistencia = new RemessaPersistencia();
+                remessaPersistencia.insertRecord(remessa, con);
                 
                 // Chamar metodo para buscar o ultimo ID de remessa inserido
                 int codRemessa = 14;
                 
-                /* INSERCAO DE PRODUTOS NA REMESSA */
-                while(true){
+                while(codRemessa == 14){
                     // Realiza a busca do produto no banco para obter os dados
                     int codProduto = 21;
                     double qtdPesoProduto = 0;
                     double qtdVolumeProduto = 0;
                     double qtdProduto = 72;
                     
+                    ItemRemessa itemRemessa = new ItemRemessa();
+                    itemRemessa.setCodRemessa(codRemessa);
+                    itemRemessa.setCodProduto(codProduto);
+                    itemRemessa.setQtdProduto(qtdProduto);
+                    
+                    // Realiza somatorio para a viagem
                     qtdPesoViagem += qtdPesoProduto;
                     qtdVolumeViagem += qtdVolumeProduto;
 
-                    String insertItemRemessa = "INSERT INTO item_remessa VALUES(0, ?, ?)";
-                    stmt = con.prepareStatement(insertItemRemessa);
-                    stmt.setInt(1, codRemessa);
-                    stmt.setInt(2, codProduto);
-                    stmt.setDouble(3, qtdProduto);
-                    stmt.executeUpdate();
+                    // Insere o item de remessa
+                    ItemRemessaPersistencia itemRemessaPersistencia = new ItemRemessaPersistencia();
+                    itemRemessaPersistencia.insertRecord(itemRemessa, con);
                 }
             }
             
-            /* ALTERA O PESO E VOLUME DA VIAGEM */
-            String updateViagem = "UPDATE viagem SET qtdPesoViagem = ?, qtdVolumeViagem = ? WHERE codViagem = ?";
-            stmt = con.prepareStatement(updateViagem);
-            stmt.setDouble(1, qtdPesoViagem);
-            stmt.setDouble(2, qtdVolumeViagem);
-            stmt.setInt(3, codViagem);
-            stmt.executeUpdate();
+            viagem = new Viagem();
+            viagem.setQtdPesoViagem(qtdPesoViagem);
+            viagem.setQtdVolumeViagem(qtdVolumeViagem);
+            viagem.setCodViagem(codViagem);
+            
+            // Altera o peso e volume da viagem
+            viagemPersistencia.updateRecord(viagem, con);
             
             con.commit(); //transaction block end
             con.close();
