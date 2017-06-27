@@ -11,6 +11,8 @@ package Model;
  */
 public class Cliente {
     private int codCliente;
+    private int numCnpjCliente;
+    private int numCpfCliente;
     private String nomCliente;
 
     public int getCodCliente() {
@@ -20,6 +22,22 @@ public class Cliente {
     public void setCodCliente(int codCliente) {
         this.codCliente = codCliente;
     }
+    
+    public int getNumCnpjCliente() {
+        return numCnpjCliente;
+    }
+
+    public void setNumCnpjCliente(int numCnpjCliente) {
+        this.numCnpjCliente = numCnpjCliente;
+    }
+    
+    public int getNumCpfCliente() {
+        return numCpfCliente;
+    }
+
+    public void setNumCpfCliente(int numCpfCliente) {
+        this.numCpfCliente = numCpfCliente;
+    }
 
     public String getNomCliente() {
         return nomCliente;
@@ -27,5 +45,10 @@ public class Cliente {
 
     public void setNomCliente(String nomCliente) {
         this.nomCliente = nomCliente;
+    }
+    
+    @Override
+    public String toString(){
+        return nomCliente;
     }
 }

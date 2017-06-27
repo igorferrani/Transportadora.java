@@ -46,4 +46,8 @@ public class Deposito {
     public void setNumDeposito(int numDeposito) {
         this.numDeposito = numDeposito;
     }
+    
+    public String toString(){
+        return "Depósito - " + numDeposito;
+    }
 }

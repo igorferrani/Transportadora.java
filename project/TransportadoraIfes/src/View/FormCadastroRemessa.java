@@ -5,7 +5,13 @@
  */
 package View;
 
-import Model.Caminhao;
+import Controller.CtrlCliente;
+import Controller.CtrlDeposito;
+import Model.Cliente;
+import Model.Deposito;
+import java.sql.SQLException;
+import javax.swing.JComboBox;
+import transportadoraifes.Util;
 
 /**
  *
@@ -18,6 +24,7 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
      */
     public FormCadastroRemessa() {
         initComponents();
+        init();
     }
 
     /**
@@ -30,7 +37,7 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        inputDeposito = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -43,9 +50,9 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
         jSpinner2 = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        inputNumRemessa = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        inputCliente = new javax.swing.JComboBox<>();
         btnCancelarRemessa = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
@@ -56,7 +63,11 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações da remessa"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        inputDeposito.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputDepositoActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Depósito (destino)");
 
@@ -94,17 +105,16 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
 
         jLabel2.setText("Cliente");
 
-        jTextField1.setText("Nome do cliente do deposito");
-        jTextField1.setEnabled(false);
-
-        jTextField2.setText("REM001");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        inputNumRemessa.setText("REM001");
+        inputNumRemessa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                inputNumRemessaActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Nº remessa");
+
+        inputCliente.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -132,19 +142,22 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                                 .addComponent(jButton1))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(inputDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
-                                    .addComponent(jTextField1))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(inputCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addGap(9, 9, 9)))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(inputNumRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,12 +170,12 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(inputDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputNumRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -176,9 +189,8 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(jLabel5))
                         .addGap(26, 26, 26)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(btnRemoverCaminhao)
                 .addContainerGap())
         );
@@ -209,7 +221,7 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -238,14 +250,70 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void inputNumRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNumRemessaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_inputNumRemessaActionPerformed
 
     private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox3ActionPerformed
 
+    private void inputDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDepositoActionPerformed
+
+        if(evt.getActionCommand() == "comboBoxChanged"){
+            Deposito deposito = getSelectedDeposito();
+            Cliente cliente = new Cliente();
+            cliente.setCodCliente(deposito.getCodCliente());
+            System.out.println("Changed: " + deposito.getCodCliente());
+            setSelectedCliente(cliente);
+        }
+    }//GEN-LAST:event_inputDepositoActionPerformed
+    
+    public void init(){
+        setSelectDeposito();
+        setSelectCliente();
+    }
+    
+    public Deposito getSelectedDeposito(){
+        Deposito deposito = inputDeposito.getItemAt(inputDeposito.getSelectedIndex());
+        return deposito;
+    }
+    
+    public void setSelectDeposito(){
+        inputDeposito.removeAllItems();
+        CtrlDeposito ctrlDeposito = new CtrlDeposito();
+        try {
+            ctrlDeposito.setComboBox(inputDeposito);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void setSelectCliente(){
+        inputCliente.removeAllItems();
+        CtrlCliente ctrlCliente = new CtrlCliente();
+        try {
+            ctrlCliente.setComboBox(inputCliente);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void setSelectedCliente(Cliente cliente){
+        try {
+            CtrlCliente ctrlCliente = new CtrlCliente();
+            ctrlCliente.setSelectedComboBox(cliente, inputCliente);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -291,9 +359,11 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarRemessa;
     private javax.swing.JButton btnRemoverCaminhao;
+    private javax.swing.JComboBox<Cliente> inputCliente;
+    private javax.swing.JComboBox<Deposito> inputDeposito;
+    private javax.swing.JTextField inputNumRemessa;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -306,7 +376,5 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
