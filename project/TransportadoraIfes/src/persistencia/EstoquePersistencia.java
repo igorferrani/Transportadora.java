@@ -5,7 +5,7 @@
  */
 package persistencia;
 
-import Model.Produto;
+import Model.Estoque;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,13 +14,14 @@ import java.sql.SQLException;
  *
  * @author Igor Ferrani
  */
-public class ProdutoPersistencia {
+public class EstoquePersistencia {
     
-    public ResultSet selectAllRecords(Produto obj, java.sql.Connection con) throws Exception{
+    public ResultSet selectProdutoPorArmazem(Estoque obj, java.sql.Connection con) throws Exception{
         try {            
-            String sql = "SELECT * FROM produto WHERE codCliente = ?";
+            String sql = "SELECT COALESCE(SUM(qtdProduto), 0) AS qtdProduto FROM estoque WHERE codArmazem = ? AND codProduto = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setInt(1, obj.getCodCliente());
+            stmt.setInt(1, obj.getCodArmazem());
+            stmt.setInt(2, obj.getCodProduto());
             ResultSet rs = stmt.executeQuery();
             return rs;
         } catch (SQLException e){
@@ -30,13 +31,15 @@ public class ProdutoPersistencia {
         }
     }
     
-    public ResultSet selectRecord(Produto produto, java.sql.Connection con) throws Exception{
+    public boolean updateQtdEstoqueProdutoPorArmazem(Estoque obj, java.sql.Connection con) throws Exception{
         try {            
-            String sql = "SELECT * FROM produto HWERE codProduto = ?";
+            String sql = "UPDATE estoque SET qtdProduto = qtdProduto - ? WHERE codArmazem = ? AND codProduto = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setInt(1, produto.getCodProduto());
-            ResultSet rs = stmt.executeQuery();
-            return rs;
+            stmt.setDouble(1, obj.getQtdProduto());
+            stmt.setInt(2, obj.getCodArmazem());
+            stmt.setInt(3, obj.getCodProduto());
+            stmt.executeUpdate();
+            return true;
         } catch (SQLException e){
             throw new Exception("Error SQLException ("+this.getClass().getName()+"): " + e.getMessage());
         } catch (Exception e){

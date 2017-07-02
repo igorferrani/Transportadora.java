@@ -143,7 +143,6 @@ public class FormCadastroViagem extends javax.swing.JFrame {
             }
         });
 
-        inputPesoTotal.setText("jTextField1");
         inputPesoTotal.setEnabled(false);
 
         inputVolumeTotal.setEnabled(false);
@@ -239,7 +238,6 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                                     .addComponent(inputNumViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(inputPesoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(inputVolumeTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -449,6 +447,12 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         }
         inputPesoTotal.setText(Double.toString(pesoTotal));
         inputVolumeTotal.setText(Double.toString(volumeTotal));
+    }
+    
+    public Armazem getModelArmazem(){
+        if(inputArmazem.getSelectedIndex() >= 0)
+            return inputArmazem.getItemAt(inputArmazem.getSelectedIndex());
+        return null;
     }
     
     

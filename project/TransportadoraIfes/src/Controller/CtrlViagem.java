@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import Model.Estoque;
 import Model.ItemRemessa;
 import Model.Remessa;
 import Model.Viagem;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.table.DefaultTableModel;
 import persistencia.ConnectionBd;
+import persistencia.EstoquePersistencia;
 import persistencia.ItemRemessaPersistencia;
 import persistencia.RemessaPersistencia;
 import persistencia.ViagemPersistencia;
@@ -52,12 +54,10 @@ public class CtrlViagem {
                 int codRemessa = remessaPersistencia.insertRecord(remessa, con);
                 
                 for(int r = 0; r < remessa.getArrayItemRemessa().getSize(); r++){
-                    // Realiza a busca do produto no banco para obter os dados
-                    
-                    
                     ItemRemessa itemRemessa = (ItemRemessa) remessa.getArrayItemRemessa().get(r);
                     itemRemessa.setCodRemessa(codRemessa);
                     
+                    // Faz o calculo dos totais da viagem
                     double qtdPesoProduto = itemRemessa.getProduto().getQtdPesoProduto();
                     double qtdVolumeProduto = itemRemessa.getProduto().getQtdVolumeProduto();
                     
@@ -68,6 +68,14 @@ public class CtrlViagem {
                     // Insere o item de remessa
                     ItemRemessaPersistencia itemRemessaPersistencia = new ItemRemessaPersistencia();
                     itemRemessaPersistencia.insertRecord(itemRemessa, con);
+                    
+                    // Movimenta o estoque do armazem
+                    EstoquePersistencia estoquePersistencia = new EstoquePersistencia();
+                    Estoque estoque = new Estoque();
+                    estoque.setCodArmazem(viagem.getCodArmazem());
+                    estoque.setCodProduto(itemRemessa.getProduto().getCodProduto());
+                    estoque.setQtdProduto(itemRemessa.getQtdProduto());
+                    estoquePersistencia.updateQtdEstoqueProdutoPorArmazem(estoque, con);
                 }
             }
             
