@@ -40,43 +40,22 @@ public class CaminhaoPersistencia {
             return true;
             
         } catch (SQLException e){
-            throw new Exception(">> Error SQLException (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error SQLException (CaminhaoPersistencia): " + e.getMessage());
         } catch (Exception e){
-            throw new Exception(">> Error Exception (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error Exception (CaminhaoPersistencia): " + e.getMessage());
         }
     }
     
-    public ArrayList selectAllRecords() throws Exception{
-        Statement stmt = null;
-        java.sql.Connection con = null;
-        ArrayList listCaminhao = new ArrayList();
-        try {
-            ConnectionBd connectionBd = new ConnectionBd();
-            con = connectionBd.getConnection();
-            
+    public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
+        try {            
             String sql = "SELECT * FROM caminhao";
-            
-            stmt = con.createStatement();
+            Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            
-            while(rs.next()){
-                Caminhao caminhao = new Caminhao();
-                caminhao.setCodCaminhao(rs.getInt("codCaminhao"));
-                caminhao.setQtdVolumeCaminhao(rs.getDouble("qtdVolumeCaminhao"));
-                caminhao.setQtdPesoCaminhao(rs.getDouble("qtdPesoCaminhao"));
-                caminhao.setNumLicencaCaminhao(rs.getString("numLicencaCaminhao"));
-                listCaminhao.add(caminhao);
-            }
-            rs.close();
-            stmt.close();
-            con.close();
-            
-            return listCaminhao;
-            
+            return rs;
         } catch (SQLException e){
-            throw new Exception(">> Error SQLException (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error SQLException (CaminhaoPersistencia): " + e.getMessage());
         } catch (Exception e){
-            throw new Exception(">> Error Exception (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error Exception (CaminhaoPersistencia): " + e.getMessage());
         }
     }
 }

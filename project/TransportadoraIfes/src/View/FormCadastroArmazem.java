@@ -5,10 +5,10 @@
  */
 package View;
 
-import Model.Armazem;
-import java.util.ArrayList;
+import Controller.CtrlArmazem;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
-import persistencia.ArmazemPersistencia;
+import transportadoraifes.Util;
 
 /**
  *
@@ -276,22 +276,17 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
         });
     }
     
-    private void updateTable(){        
+    private void updateTable(){
         DefaultTableModel model = (DefaultTableModel)tableArmazem.getModel();        
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();        
-        ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia(); 
+        CtrlArmazem ctrlArmazem = new CtrlArmazem();
         try{                    
-            ArrayList<Armazem> lista  = armazemPersistencia.selectAllRecords();
-            for(int i=0;i < lista.size();i++){
-                Armazem item = lista.get(i);
-                model.addRow( new Object[] { 
-                    item.getCodArmazem() , 
-                    item.getNomArmazem(),
-                });
-            }            
-        } catch(Exception ex){
-            System.out.println(ex.getMessage());
+            ctrlArmazem.setDataTable(model);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
         }
     }
 

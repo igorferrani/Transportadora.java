@@ -5,19 +5,18 @@
  */
 package transportadoraifes;
 
-import View.ViewMenuPrincipal;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Igor Ferrani
  */
-public class TransportadoraIfes {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception {
-        new ViewMenuPrincipal().setVisible(true);
+public class Util {
+    public static void showCatch(String e){
+        showMessage("### " + e);
     }
     
+    public static void showMessage(String e){
+        JOptionPane.showMessageDialog(null, e);
+    }
 }

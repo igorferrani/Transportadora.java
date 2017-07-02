@@ -5,6 +5,11 @@
  */
 package View;
 
+import Controller.CtrlViagem;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import transportadoraifes.Util;
+
 /**
  *
  * @author Igor Ferrani
@@ -16,6 +21,7 @@ public class ViewListagemViagem extends javax.swing.JFrame {
      */
     public ViewListagemViagem() {
         initComponents();
+        init();
     }
 
     /**
@@ -29,7 +35,7 @@ public class ViewListagemViagem extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tableViagem = new javax.swing.JTable();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -38,15 +44,15 @@ public class ViewListagemViagem extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Listagem de viagens"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tableViagem.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Cód. Viagem", "Cód. Armazem", "Cód. Caminhão", "Núm. Viagem", "Peso Total", "Volume Total"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tableViagem);
 
         jButton1.setText("Buscar");
 
@@ -101,6 +107,24 @@ public class ViewListagemViagem extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void init(){
+        updateTable();
+    }
+    
+    private void updateTable(){
+        DefaultTableModel model = (DefaultTableModel)tableViagem.getModel();        
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();        
+        CtrlViagem ctrlViagem = new CtrlViagem(); 
+        try {
+            ctrlViagem.setDataTable(model);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -141,7 +165,7 @@ public class ViewListagemViagem extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tableViagem;
     // End of variables declaration//GEN-END:variables
 }

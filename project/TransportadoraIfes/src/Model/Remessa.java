@@ -5,6 +5,9 @@
  */
 package Model;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+
 /**
  *
  * @author Igor Ferrani
@@ -14,6 +17,33 @@ public class Remessa {
     private int codViagem;
     private int codDeposito;
     private String numRemessa;
+    private DefaultListModel arrayItemRemessa;
+    private String nomCliente;
+    private String nomDeposito;
+    
+    public String getNomCliente() {
+        return nomCliente;
+    }
+
+    public void setNomCliente(String nomCliente) {
+        this.nomCliente = nomCliente;
+    }
+
+    public String getNomDeposito() {
+        return nomDeposito;
+    }
+
+    public void setNomDeposito(String nomDeposito) {
+        this.nomDeposito = nomDeposito;
+    }
+
+    public DefaultListModel getArrayItemRemessa() {
+        return arrayItemRemessa;
+    }
+
+    public void setArrayItemRemessa(DefaultListModel arrayItemRemessa) {
+        this.arrayItemRemessa = arrayItemRemessa;
+    }
 
     public int getCodRemessa() {
         return codRemessa;
@@ -45,5 +75,9 @@ public class Remessa {
 
     public void setNumRemessa(String numRemessa) {
         this.numRemessa = numRemessa;
+    }
+    
+    public String toString(){
+        return numRemessa + " | " + nomCliente + " | " + nomDeposito;
     }
 }

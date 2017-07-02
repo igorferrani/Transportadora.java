@@ -46,4 +46,8 @@ public class Caminhao {
     public void setNumLicencaCaminhao(String numLicencaCaminhao) {
         this.numLicencaCaminhao = numLicencaCaminhao;
     }
+    
+    public String toString(){
+        return numLicencaCaminhao;
+    }
 }

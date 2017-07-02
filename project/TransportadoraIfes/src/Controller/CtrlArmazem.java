@@ -5,12 +5,13 @@
  */
 package Controller;
 
+import Model.Armazem;
 import Model.Caminhao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
-import persistencia.CaminhaoPersistencia;
+import persistencia.ArmazemPersistencia;
 import persistencia.ConnectionBd;
 import transportadoraifes.Item;
 
@@ -18,53 +19,51 @@ import transportadoraifes.Item;
  *
  * @author Igor Ferrani
  */
-public class CtrlCaminhao {
-
+public class CtrlArmazem {
+    
     public void setComboBox(JComboBox inputSelect) throws SQLException, Exception{
         
-        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
+        ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia();
         ConnectionBd connectionBd = new ConnectionBd();
         java.sql.Connection con = connectionBd.getConnection();
         ResultSet rs;
         
         try {
-            rs  = caminhaoPersistencia.selectAllRecords(con);
+            rs  = armazemPersistencia.selectAllRecords(con);
             while(rs.next()){
-                Caminhao caminhao = new Caminhao();
-                caminhao.setCodCaminhao(rs.getInt("codCaminhao"));
-                caminhao.setNumLicencaCaminhao(rs.getString("numLicencaCaminhao"));
-                inputSelect.addItem(caminhao);
+                Armazem armazem = new Armazem();
+                armazem.setCodArmazem(rs.getInt("codArmazem"));
+                armazem.setNomArmazem(rs.getString("nomArmazem"));
+                inputSelect.addItem(armazem);
             }
             rs.close();
             con.close();
         } catch(SQLException e){
-            throw new SQLException("Error SQLException (CtrlCaminhao): " + e.getMessage());
+            throw new SQLException(e.getMessage());
         } catch(Exception e){
-            throw new Exception("Error Exception (CtrlCaminhao): " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     
     public void setDataTable(DefaultTableModel tableModel) throws SQLException, Exception{
         
-        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
+        ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia();
         ConnectionBd connectionBd = new ConnectionBd();
         java.sql.Connection con = connectionBd.getConnection();
         ResultSet rs;
         
         try {
-            rs  = caminhaoPersistencia.selectAllRecords(con);
+            rs  = armazemPersistencia.selectAllRecords(con);
             while(rs.next()){
                 tableModel.addRow( new Object[] { 
-                    rs.getInt("codCaminhao") , 
-                    rs.getDouble("qtdVolumeCaminhao"),
-                    rs.getDouble("qtdPesoCaminhao"),
-                    rs.getString("numLicencaCaminhao")
+                    rs.getInt("codArmazem") , 
+                    rs.getString("nomArmazem")
                 });
             }    
         } catch(SQLException e){
-            throw new SQLException("Error SQLException (CtrlCaminhao): " + e.getMessage());
+            throw new Exception(">> Error SQLException (CtrlArmazem): " + e.getMessage());
         } catch(Exception e){
-            throw new Exception("Error Exception (CtrlCaminhao): " + e.getMessage());
+            throw new Exception(">> Error Exception (CtrlArmazem): " + e.getMessage());
         }
     }
 }

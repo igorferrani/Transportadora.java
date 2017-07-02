@@ -13,7 +13,7 @@ public class Viagem {
     private int codViagem;
     private int codArmazem;
     private int codCaminhao;
-    private int numViagem;
+    private String numViagem;
     private double qtdPesoViagem;
     private double qtdVolumeViagem;
 
@@ -41,11 +41,11 @@ public class Viagem {
         this.codCaminhao = codCaminhao;
     }
 
-    public int getNumViagem() {
+    public String getNumViagem() {
         return numViagem;
     }
 
-    public void setNumViagem(int numViagem) {
+    public void setNumViagem(String numViagem) {
         this.numViagem = numViagem;
     }
 

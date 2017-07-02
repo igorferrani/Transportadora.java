@@ -5,7 +5,20 @@
  */
 package View;
 
+import Controller.CtrlArmazem;
+import Controller.CtrlCaminhao;
+import Controller.CtrlViagem;
+import Model.Armazem;
 import Model.Caminhao;
+import Model.ItemRemessa;
+import Model.Produto;
+import Model.Remessa;
+import Model.Viagem;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import javax.swing.DefaultListModel;
+import transportadoraifes.Util;
 
 /**
  *
@@ -13,11 +26,21 @@ import Model.Caminhao;
  */
 public class FormCadastroViagem extends javax.swing.JFrame {
 
+    DefaultListModel dataListViagem = new DefaultListModel();
+    private ViewMenuPrincipal menuPrincipal;
+    
     /**
      * Creates new form FormCadastroCaminhao
      */
     public FormCadastroViagem() {
         initComponents();
+        init();
+    }
+    
+    public FormCadastroViagem(ViewMenuPrincipal viewMenuPrincipal) {
+        initComponents();
+        init();
+        menuPrincipal = viewMenuPrincipal;
     }
 
     /**
@@ -30,51 +53,63 @@ public class FormCadastroViagem extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        inputArmazem = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        inputCaminhao = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
+        listViagem = new javax.swing.JList<>();
+        btnAdicionarRemessa = new javax.swing.JButton();
         btnRemoverCaminhao = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jSpinner3 = new javax.swing.JSpinner();
-        jSpinner4 = new javax.swing.JSpinner();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        inputNumViagem = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        inputPesoTotal = new javax.swing.JTextField();
+        inputVolumeTotal = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        inputDataDespacho = new javax.swing.JFormattedTextField();
+        inputHoraDespacho = new javax.swing.JFormattedTextField();
+        btnSalvarAlteracoes = new javax.swing.JButton();
         btnCancelarRemessa = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(560, 400));
         setResizable(false);
         setSize(new java.awt.Dimension(700, 300));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações da viagem"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        inputArmazem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputArmazemActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Armazem (origem)");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        inputCaminhao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputCaminhaoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Caminhão");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        listViagem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                listViagemMousePressed(evt);
+            }
         });
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(listViagem);
 
-        jButton1.setText("Adicionar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAdicionarRemessa.setText("Adicionar");
+        btnAdicionarRemessa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAdicionarRemessaActionPerformed(evt);
             }
         });
 
@@ -90,17 +125,13 @@ public class FormCadastroViagem extends javax.swing.JFrame {
 
         jLabel7.setText("Peso total");
 
-        jSpinner3.setEnabled(false);
-
-        jSpinner4.setEnabled(false);
-
         jLabel8.setText("Volume total");
 
         jLabel9.setText("Núm. viagem");
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        inputNumViagem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                inputNumViagemActionPerformed(evt);
             }
         });
 
@@ -111,6 +142,24 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+
+        inputPesoTotal.setText("jTextField1");
+        inputPesoTotal.setEnabled(false);
+
+        inputVolumeTotal.setEnabled(false);
+
+        jLabel3.setText("Data de despacho");
+
+        jLabel5.setText("Hora de despacho");
+
+        inputDataDespacho.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        inputDataDespacho.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputDataDespachoActionPerformed(evt);
+            }
+        });
+
+        inputHoraDespacho.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -124,77 +173,99 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnAdicionarRemessa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnRemoverCaminhao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(154, 154, 154)
                                 .addComponent(jLabel2))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel7)
+                                .addGap(107, 107, 107)
+                                .addComponent(jLabel8))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(inputPesoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
+                                .addComponent(inputVolumeTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(68, 68, 68))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(inputDataDespacho)
+                                        .addGap(18, 18, 18)))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel5)
+                                    .addComponent(inputHoraDespacho))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(inputNumViagem, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inputArmazem, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(14, 14, 14)
-                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(inputCaminhao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(7, 7, 7))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(7, 7, 7))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSpinner3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinner4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(inputArmazem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputCaminhao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(52, 52, 52))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(inputNumViagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputPesoTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(inputVolumeTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(inputDataDespacho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputHoraDespacho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(26, 26, 26)))
+                .addGap(12, 12, 12)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnAdicionarRemessa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnRemoverCaminhao)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
-        jButton3.setText("Salvar alterações");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvarAlteracoes.setText("Salvar alterações");
+        btnSalvarAlteracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSalvarAlteracoesActionPerformed(evt);
             }
         });
 
@@ -217,7 +288,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnCancelarRemessa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)))
+                        .addComponent(btnSalvarAlteracoes)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -228,37 +299,159 @@ public class FormCadastroViagem extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelarRemessa)
-                    .addComponent(jButton3))
+                    .addComponent(btnSalvarAlteracoes))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void inputNumViagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNumViagemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_inputNumViagemActionPerformed
 
     private void btnRemoverCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverCaminhaoActionPerformed
         // TODO add your handling code here:
+        int index = listViagem.getSelectedIndex();
+        removeListItem(index);
     }//GEN-LAST:event_btnRemoverCaminhaoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new FormCadastroRemessa().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnAdicionarRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarRemessaActionPerformed
+        //JComboBox armazem = (JComboBox) inputArmazem.getSelectedItem();
+        System.out.println(inputArmazem.getSelectedIndex());
+        FormCadastroRemessa formCadastroRemessa = new FormCadastroRemessa(this);
+        formCadastroRemessa.setVisible(true);
+    }//GEN-LAST:event_btnAdicionarRemessaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnSalvarAlteracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarAlteracoesActionPerformed
+        int codCaminhao = inputCaminhao.getItemAt(inputCaminhao.getSelectedIndex()).getCodCaminhao();
+        int codArmazem = inputArmazem.getItemAt(inputArmazem.getSelectedIndex()).getCodArmazem();
+        String numViagem = inputNumViagem.getText();
+        
+        Viagem viagem = new Viagem();
+        viagem.setCodCaminhao(codCaminhao);
+        viagem.setCodArmazem(codArmazem);
+        viagem.setNumViagem(numViagem);
+       
+        if(dataListViagem.getSize() > 0){
+            CtrlViagem ctrlViagem = new CtrlViagem();
+            ctrlViagem.insertRecord(viagem, dataListViagem);
+            
+            this.setVisible(false);
+            Util.showMessage("Viagem registrada com sucesso !");
+            menuPrincipal.updateTable();
+        } else {
+            Util.showMessage("Insira ao menos 1 remessa na viagem");
+        }
+    }//GEN-LAST:event_btnSalvarAlteracoesActionPerformed
 
     private void btnCancelarRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRemessaActionPerformed
-        //new FormCadastroRemessa().setVisible(false);
+        this.setVisible(false);
     }//GEN-LAST:event_btnCancelarRemessaActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void inputArmazemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputArmazemActionPerformed
+        
+    }//GEN-LAST:event_inputArmazemActionPerformed
+
+    private void inputCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCaminhaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputCaminhaoActionPerformed
+
+    private void listViagemMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listViagemMousePressed
+        if(listViagem.getSelectedIndex() >= 0){
+            btnRemoverCaminhao.setEnabled(true);
+        } else {
+            btnRemoverCaminhao.setEnabled(false);
+        }
+    }//GEN-LAST:event_listViagemMousePressed
+
+    private void inputDataDespachoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataDespachoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputDataDespachoActionPerformed
+
+    public void init(){
+        setSelectArmazem();
+        setSelectCaminhao();
+        setDataHoraDespacho();
+        calculaTotalViagem();
+    }
+    
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH:mm");
+    
+    public void setDataHoraDespacho(){
+        LocalDateTime now = LocalDateTime.now();
+	inputDataDespacho.setText(dateFormat.format(now));
+        inputHoraDespacho.setText(hourFormat.format(now));
+    }
+
+    public void addListItem(Remessa remessa){
+        dataListViagem.addElement(remessa);
+        listViagem.setModel(dataListViagem);
+        calculaTotalViagem();
+    }
+    
+    public void removeListItem(int index){
+        if(index >= 0){
+            dataListViagem.remove(index);
+            listViagem.setModel(dataListViagem);
+            calculaTotalViagem();
+        }
+    }
+    
+    public void setSelectArmazem(){
+        try {
+            inputArmazem.removeAllItems();
+            CtrlArmazem ctrlArmazem = new CtrlArmazem();
+            ctrlArmazem.setComboBox(inputArmazem);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void setSelectCaminhao(){
+        try {
+            inputCaminhao.removeAllItems();
+            CtrlCaminhao ctrlCaminhao = new CtrlCaminhao();
+            ctrlCaminhao.setComboBox(inputCaminhao);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void calculaTotalViagem(){
+        inputPesoTotal.setText("0");
+        inputVolumeTotal.setText("0");
+        
+        double pesoTotal = 0;
+        double volumeTotal = 0;
+        
+        if(dataListViagem.getSize() > 0){
+            // Roda em cada remessa
+            for(int i = 0; i < dataListViagem.getSize(); i++){
+                Remessa remessa = (Remessa) dataListViagem.get(i);
+                // Roda em cada item de remessa
+                for(int r = 0; r < remessa.getArrayItemRemessa().getSize(); r++){
+                    ItemRemessa itemRemessa = (ItemRemessa) remessa.getArrayItemRemessa().get(r);
+                    Produto produto = itemRemessa.getProduto();
+                    pesoTotal += produto.getQtdPesoProduto() * itemRemessa.getQtdProduto();
+                    volumeTotal += produto.getQtdVolumeProduto() * itemRemessa.getQtdProduto();
+                }
+            }
+        }
+        inputPesoTotal.setText(Double.toString(pesoTotal));
+        inputVolumeTotal.setText(Double.toString(volumeTotal));
+    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -298,24 +491,28 @@ public class FormCadastroViagem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdicionarRemessa;
     private javax.swing.JButton btnCancelarRemessa;
     private javax.swing.JButton btnRemoverCaminhao;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnSalvarAlteracoes;
+    private javax.swing.JComboBox<Armazem> inputArmazem;
+    private javax.swing.JComboBox<Caminhao> inputCaminhao;
+    private javax.swing.JFormattedTextField inputDataDespacho;
+    private javax.swing.JFormattedTextField inputHoraDespacho;
+    private javax.swing.JTextField inputNumViagem;
+    private javax.swing.JTextField inputPesoTotal;
+    private javax.swing.JTextField inputVolumeTotal;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner3;
-    private javax.swing.JSpinner jSpinner4;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JList<Remessa> listViagem;
     // End of variables declaration//GEN-END:variables
 }

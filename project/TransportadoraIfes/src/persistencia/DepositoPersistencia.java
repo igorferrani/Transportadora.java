@@ -5,7 +5,6 @@
  */
 package persistencia;
 
-import Model.Cliente;
 import Model.Deposito;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,13 +15,14 @@ import java.sql.Statement;
  *
  * @author Igor Ferrani
  */
-public class ClientePersistencia {
+public class DepositoPersistencia {
     
-    public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
+    public ResultSet selectAllRecords(Deposito obj, java.sql.Connection con) throws Exception{
         try {            
-            String sql = "SELECT * FROM cliente";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
+            String sql = "SELECT * FROM deposito WHERE codCliente = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, obj.getCodCliente());
+            ResultSet rs = stmt.executeQuery();
             return rs;
         } catch (SQLException e){
             throw new Exception("Error SQLException ("+getClass().getName()+"): " + e.getMessage());
@@ -31,11 +31,11 @@ public class ClientePersistencia {
         }
     }
     
-    public ResultSet selectRecord(Cliente cliente, java.sql.Connection con) throws Exception{
+    public ResultSet selectRecord(Deposito deposito, java.sql.Connection con) throws Exception{
         try {            
-            String sql = "SELECT * FROM cliente WHERE codCliente = ?";
+            String sql = "SELECT * FROM deposito WHERE codDeposito = ?";
             PreparedStatement stmt = con.prepareStatement(sql);
-            stmt.setInt(1, cliente.getCodCliente());
+            stmt.setInt(1, deposito.getCodDeposito());
             ResultSet rs = stmt.executeQuery();
             return rs;
         } catch (SQLException e){

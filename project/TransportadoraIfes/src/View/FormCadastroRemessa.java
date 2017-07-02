@@ -5,7 +5,17 @@
  */
 package View;
 
-import Model.Caminhao;
+import Controller.CtrlCliente;
+import Controller.CtrlDeposito;
+import Controller.CtrlProduto;
+import Model.Cliente;
+import Model.Deposito;
+import Model.ItemRemessa;
+import Model.Produto;
+import Model.Remessa;
+import java.sql.SQLException;
+import javax.swing.DefaultListModel;
+import transportadoraifes.Util;
 
 /**
  *
@@ -13,11 +23,24 @@ import Model.Caminhao;
  */
 public class FormCadastroRemessa extends javax.swing.JFrame {
 
+    DefaultListModel dataListItem = new DefaultListModel();
+    private FormCadastroViagem formCadastroViagem;
+    
     /**
      * Creates new form FormCadastroCaminhao
      */
     public FormCadastroRemessa() {
         initComponents();
+        init();
+        //FormCadastroViagem formCadastroViagem = cadastroViagem;
+        
+        //System.out.println(formCadastroViagem);
+    }
+    
+    public FormCadastroRemessa(FormCadastroViagem cadastroViagem) {
+        initComponents();
+        init();
+        formCadastroViagem = cadastroViagem;
     }
 
     /**
@@ -30,57 +53,61 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        inputDeposito = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton1 = new javax.swing.JButton();
-        btnRemoverCaminhao = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        listItem = new javax.swing.JList<>();
+        inserirItem = new javax.swing.JButton();
+        removerItem = new javax.swing.JButton();
+        inputProduto = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jSpinner2 = new javax.swing.JSpinner();
+        inputQtdProduto = new javax.swing.JSpinner();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        inputNumRemessa = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        inputCliente = new javax.swing.JComboBox<>();
+        inputCodRemessa = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        inputValorProduto = new javax.swing.JTextField();
         btnCancelarRemessa = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSalvarAlteracoes = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(560, 400));
         setResizable(false);
         setSize(new java.awt.Dimension(700, 300));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações da remessa"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel1.setText("Depósito (destino)");
-
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane2.setViewportView(jList1);
-
-        jButton1.setText("Adicionar");
-
-        btnRemoverCaminhao.setText("Remover item");
-        btnRemoverCaminhao.setEnabled(false);
-        btnRemoverCaminhao.addActionListener(new java.awt.event.ActionListener() {
+        inputDeposito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoverCaminhaoActionPerformed(evt);
+                inputDepositoActionPerformed(evt);
             }
         });
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
+        jLabel1.setText("Depósito (destino)");
+
+        jScrollPane2.setViewportView(listItem);
+
+        inserirItem.setText("Inserir");
+        inserirItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
+                inserirItemActionPerformed(evt);
+            }
+        });
+
+        removerItem.setText("Remover item");
+        removerItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                removerItemActionPerformed(evt);
+            }
+        });
+
+        inputProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputProdutoActionPerformed(evt);
             }
         });
 
@@ -88,23 +115,35 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
 
         jLabel5.setText("Produto");
 
-        jSpinner2.setEnabled(false);
-
         jLabel6.setText("Valor R$");
 
         jLabel2.setText("Cliente");
 
-        jTextField1.setText("Nome do cliente do deposito");
-        jTextField1.setEnabled(false);
-
-        jTextField2.setText("REM001");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        inputNumRemessa.setText("REM001");
+        inputNumRemessa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                inputNumRemessaActionPerformed(evt);
             }
         });
 
         jLabel4.setText("Nº remessa");
+
+        inputCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputClienteActionPerformed(evt);
+            }
+        });
+
+        inputCodRemessa.setEnabled(false);
+        inputCodRemessa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputCodRemessaActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Cod. remessa");
+
+        inputValorProduto.setEnabled(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -115,36 +154,45 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnRemoverCaminhao))
+                        .addComponent(removerItem))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addGap(40, 40, 40)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(92, 92, 92)
+                                        .addComponent(inserirItem))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel2)
+                                        .addGap(0, 98, Short.MAX_VALUE))
+                                    .addComponent(inputCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jTextField1))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(inputDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(inputNumRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(inputCodRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(inputProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(inputValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(inputQtdProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(2, 2, 2))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,33 +201,37 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(inputNumRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(inputDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(inputCodRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(17, 17, 17)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel5))
-                        .addGap(26, 26, 26)))
+                        .addComponent(inputValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inputProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(inserirItem, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(inputQtdProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRemoverCaminhao)
+                .addComponent(removerItem)
                 .addContainerGap())
         );
 
@@ -190,10 +242,10 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Salvar alterações");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvarAlteracoes.setText("Salvar alterações");
+        btnSalvarAlteracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnSalvarAlteracoesActionPerformed(evt);
             }
         });
 
@@ -205,11 +257,11 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnCancelarRemessa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(btnSalvarAlteracoes)
                 .addGap(17, 17, 17))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 53, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,33 +271,207 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCancelarRemessa)
-                    .addComponent(jButton3))
+                    .addComponent(btnSalvarAlteracoes))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnRemoverCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverCaminhaoActionPerformed
+    private void removerItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerItemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnRemoverCaminhaoActionPerformed
+        int index = listItem.getSelectedIndex();
+        removeListItem(index);
+    }//GEN-LAST:event_removerItemActionPerformed
 
     private void btnCancelarRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRemessaActionPerformed
-        //new FormCadastroRemessa().setVisible(false);
+        this.setVisible(false);
     }//GEN-LAST:event_btnCancelarRemessaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnSalvarAlteracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarAlteracoesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        String codRemessa = inputCodRemessa.getText();
+        if(!"".equals(codRemessa)){
+            // percorre a listagem para editar o existente
+        } else {
+            int codDeposito = inputDeposito.getItemAt(inputDeposito.getSelectedIndex()).getCodDeposito();
+            String numRemessa = inputNumRemessa.getText();
+            String nomCliente = inputCliente.getItemAt(inputCliente.getSelectedIndex()).getNomCliente();
+            String nomDeposito = inputDeposito.getItemAt(inputDeposito.getSelectedIndex()).getNomDeposito();
+            
+            // insere um novo
+            Remessa remessa = new Remessa();
+            remessa.setCodDeposito(codDeposito);
+            remessa.setNumRemessa(numRemessa);
+            remessa.setArrayItemRemessa(dataListItem);
+            remessa.setNomCliente(nomCliente);
+            remessa.setNomDeposito(nomDeposito);
+            
+            if(dataListItem.getSize() > 0){
+                formCadastroViagem.addListItem(remessa);
+                this.setVisible(false);
+            } else {
+                Util.showMessage("Informe ao menos 1 item de produto para a remessa");
+            }
+        }
+    }//GEN-LAST:event_btnSalvarAlteracoesActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void inputNumRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNumRemessaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_inputNumRemessaActionPerformed
 
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox3ActionPerformed
+    private void inputProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputProdutoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox3ActionPerformed
+        if(inputProduto.getSelectedIndex() >= 0){
+            double valorProduto = inputProduto.getItemAt(inputProduto.getSelectedIndex()).getValProduto();
+            inputValorProduto.setText(Double.toString(valorProduto));
+        }
+    }//GEN-LAST:event_inputProdutoActionPerformed
 
+    private void inputDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDepositoActionPerformed
+        // codigo
+    }//GEN-LAST:event_inputDepositoActionPerformed
+
+    private void inputCodRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputCodRemessaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputCodRemessaActionPerformed
+
+    private void inputClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputClienteActionPerformed
+        // TODO add your handling code here:
+        setSelectDeposito();
+        setSelectProduto();
+    }//GEN-LAST:event_inputClienteActionPerformed
+
+    private void inserirItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirItemActionPerformed
+        int codProduto = inputProduto.getItemAt(inputProduto.getSelectedIndex()).getCodProduto();
+        Produto produto = inputProduto.getItemAt(inputProduto.getSelectedIndex());
+        int qtdProduto = (Integer) inputQtdProduto.getValue();
+        
+        if(qtdProduto > 0){
+            ItemRemessa itemRemessa = new ItemRemessa();
+            itemRemessa.setCodProduto(codProduto);
+            itemRemessa.setQtdProduto(qtdProduto);
+            itemRemessa.setProduto(produto);
+            addListItem(itemRemessa);
+            resetItem();
+        } else {
+            Util.showMessage("É preciso informar a quantidade para o produto");
+        }
+    }//GEN-LAST:event_inserirItemActionPerformed
+    
+    public void resetItem(){
+        inputQtdProduto.setValue(0);
+    }
+    
+    public void addListItem(ItemRemessa itemRemessa){
+        dataListItem.addElement(itemRemessa);
+        listItem.setModel(dataListItem);
+        blockModifyCliente();
+    }
+    
+    public void removeListItem(int index){
+        if(index >= 0){
+            dataListItem.remove(index);
+            //listItem.setModel(dataListItem);
+            blockModifyCliente();
+        }
+    }
+    
+    public void init(){
+        setSelectCliente();
+        setSelectDeposito();
+        blockModifyCliente();
+    }
+    
+    public void setSelectDeposito(){
+        inputDeposito.removeAllItems();
+        
+        try {
+            if(inputCliente.getSelectedIndex() >= 0){
+                int codCliente = inputCliente.getItemAt(inputCliente.getSelectedIndex()).getCodCliente();
+                Deposito deposito = new Deposito();
+                deposito.setCodCliente(codCliente);
+                
+                CtrlDeposito ctrlDeposito = new CtrlDeposito();
+                ctrlDeposito.setComboBox(inputDeposito, deposito);
+            }
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void setSelectCliente(){
+        inputCliente.removeAllItems();
+        CtrlCliente ctrlCliente = new CtrlCliente();
+        try {
+            ctrlCliente.setComboBox(inputCliente);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    /*public void setSelectedCliente(Cliente cliente){
+        try {
+            CtrlCliente ctrlCliente = new CtrlCliente();
+            ctrlCliente.setSelectedComboBox(cliente, inputCliente);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }*/
+    
+    public void setSelectedDeposito(Deposito deposito){
+        inputDeposito.removeAllItems();
+        try {
+            CtrlDeposito ctrlDeposito = new CtrlDeposito();
+            ctrlDeposito.setSelectedComboBox(deposito, inputDeposito);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void setCodViagem(int t){
+        String codViagem = Integer.toString(t);
+        inputCodRemessa.setText(codViagem);
+    }
+    
+    public void setSelectProduto(){
+        int codCliente = inputCliente.getItemAt(inputCliente.getSelectedIndex()).getCodCliente();
+        inputProduto.removeAllItems();
+        
+        CtrlProduto ctrlProduto = new CtrlProduto();
+        Produto produto = new Produto();
+        produto.setCodCliente(codCliente);
+        try {
+            ctrlProduto.setComboBox(inputProduto, produto);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
+        }
+    }
+    
+    public void setValorProduto(double valor){
+        inputValorProduto.setText(Double.toString(valor));
+    }
+    
+    public void blockModifyCliente(){
+        int len = dataListItem.getSize();
+        boolean enabled = false;
+        if(len <= 0)
+            enabled = true;
+        
+        inputCliente.setEnabled(enabled);
+        inputDeposito.setEnabled(enabled);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -290,23 +516,25 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelarRemessa;
-    private javax.swing.JButton btnRemoverCaminhao;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JButton btnSalvarAlteracoes;
+    private javax.swing.JComboBox<Cliente> inputCliente;
+    private javax.swing.JTextField inputCodRemessa;
+    private javax.swing.JComboBox<Deposito> inputDeposito;
+    private javax.swing.JTextField inputNumRemessa;
+    private javax.swing.JComboBox<Produto> inputProduto;
+    private javax.swing.JSpinner inputQtdProduto;
+    private javax.swing.JTextField inputValorProduto;
+    private javax.swing.JButton inserirItem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSpinner jSpinner1;
-    private javax.swing.JSpinner jSpinner2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JList<ItemRemessa> listItem;
+    private javax.swing.JButton removerItem;
     // End of variables declaration//GEN-END:variables
 }

@@ -13,7 +13,7 @@ public class Deposito {
     private int codDeposito;
     private int codCliente;
     private int codEndereco;
-    private int numDeposito;
+    private String nomDeposito;
 
     public int getCodDeposito() {
         return codDeposito;
@@ -39,11 +39,15 @@ public class Deposito {
         this.codEndereco = codEndereco;
     }
 
-    public int getNumDeposito() {
-        return numDeposito;
+    public String getNomDeposito() {
+        return nomDeposito;
     }
 
-    public void setNumDeposito(int numDeposito) {
-        this.numDeposito = numDeposito;
+    public void setNomDeposito(String nomDeposito) {
+        this.nomDeposito = nomDeposito;
+    }
+    
+    public String toString(){
+        return codDeposito + " - " + nomDeposito;
     }
 }

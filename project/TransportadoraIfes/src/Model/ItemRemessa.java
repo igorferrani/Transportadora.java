@@ -12,7 +12,25 @@ package Model;
 public class ItemRemessa {
     private int codItemRemessa;
     private int codRemessa;
+    private int codProduto;
     private double qtdProduto;
+    private Produto produto;
+
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+    public int getCodProduto() {
+        return codProduto;
+    }
+
+    public void setCodProduto(int codProduto) {
+        this.codProduto = codProduto;
+    }
 
     public int getCodItemRemessa() {
         return codItemRemessa;
@@ -36,5 +54,9 @@ public class ItemRemessa {
 
     public void setQtdProduto(double qtdProduto) {
         this.qtdProduto = qtdProduto;
+    }
+    
+    public String toString(){
+        return produto.getCodProduto() + " - " + produto.getNomProduto() + " | Qtd: " + qtdProduto; 
     }
 }

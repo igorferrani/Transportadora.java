@@ -5,11 +5,14 @@
  */
 package View;
 
+import Controller.CtrlCaminhao;
 import Model.Caminhao;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import persistencia.CaminhaoPersistencia;
+import transportadoraifes.Util;
 
 /**
  *
@@ -212,24 +215,17 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
         updateTable();
     }//GEN-LAST:event_btnAdicionarCaminhaoActionPerformed
 
-    private void updateTable(){        
+    private void updateTable(){
         DefaultTableModel model = (DefaultTableModel)tableCaminhao.getModel();        
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();        
-        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia(); 
-        try{                    
-            ArrayList<Caminhao> listaVeiculos  = caminhaoPersistencia.selectAllRecords();
-            for(int i=0;i < listaVeiculos.size();i++){
-                Caminhao item = listaVeiculos.get(i);
-                model.addRow( new Object[] { 
-                    item.getCodCaminhao() , 
-                    item.getQtdVolumeCaminhao(),
-                    item.getQtdPesoCaminhao(),
-                    item.getNumLicencaCaminhao(),
-                });
-            }            
-        } catch(Exception ex){
-            System.out.println(ex.getMessage());
+        CtrlCaminhao ctrlCaminhao = new CtrlCaminhao(); 
+        try {
+            ctrlCaminhao.setDataTable(model);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
         }
     }
     
