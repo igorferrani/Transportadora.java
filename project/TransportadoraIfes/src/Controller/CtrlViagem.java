@@ -32,9 +32,6 @@ public class CtrlViagem {
         try {
             java.sql.Connection con = ConnectionBd.getConnection();
             
-            //int codArmazem = obj.getCodArmazem();
-            //int codViagem = obj.getCodViagem();
-            //int numViagem = obj.getNumViagem();
             double qtdPesoViagem = 0;
             double qtdVolumeViagem = 0;
             
@@ -108,9 +105,11 @@ public class CtrlViagem {
             while(rs.next()){
                 tableModel.addRow( new Object[] { 
                     rs.getInt("codViagem"),
+                    //rs.getInt("codArmazem"),
+                    rs.getString("nomArmazem"),
+                    //rs.getInt("codCaminhao"),
+                    rs.getString("numLicencaCaminhao"),
                     rs.getString("numViagem"),
-                    rs.getInt("codArmazem"),
-                    rs.getInt("codCaminhao"),
                     rs.getDouble("qtdPesoViagem"),
                     rs.getDouble("qtdVolumeViagem")
                 });

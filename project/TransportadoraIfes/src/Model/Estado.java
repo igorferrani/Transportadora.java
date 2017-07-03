@@ -37,4 +37,8 @@ public class Estado {
     public void setNomEstado(String nomEstado) {
         this.nomEstado = nomEstado;
     }
+    
+    public String toString(){
+        return nomEstado;
+    }
 }

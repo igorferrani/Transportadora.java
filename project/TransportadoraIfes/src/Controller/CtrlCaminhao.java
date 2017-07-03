@@ -12,7 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import persistencia.CaminhaoPersistencia;
 import persistencia.ConnectionBd;
-import transportadoraifes.Item;
+import transportadoraifes.Util;
 
 /**
  *
@@ -23,8 +23,7 @@ public class CtrlCaminhao {
     public void setComboBox(JComboBox inputSelect) throws SQLException, Exception{
         
         CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
-        ConnectionBd connectionBd = new ConnectionBd();
-        java.sql.Connection con = connectionBd.getConnection();
+        java.sql.Connection con = ConnectionBd.getConnection();
         ResultSet rs;
         
         try {
@@ -38,17 +37,16 @@ public class CtrlCaminhao {
             rs.close();
             con.close();
         } catch(SQLException e){
-            throw new SQLException("Error SQLException (CtrlCaminhao): " + e.getMessage());
+            throw new SQLException(e.getMessage());
         } catch(Exception e){
-            throw new Exception("Error Exception (CtrlCaminhao): " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
     }
     
     public void setDataTable(DefaultTableModel tableModel) throws SQLException, Exception{
         
         CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
-        ConnectionBd connectionBd = new ConnectionBd();
-        java.sql.Connection con = connectionBd.getConnection();
+        java.sql.Connection con = ConnectionBd.getConnection();
         ResultSet rs;
         
         try {
@@ -56,15 +54,34 @@ public class CtrlCaminhao {
             while(rs.next()){
                 tableModel.addRow( new Object[] { 
                     rs.getInt("codCaminhao") , 
+                    rs.getString("numLicencaCaminhao"),
                     rs.getDouble("qtdVolumeCaminhao"),
-                    rs.getDouble("qtdPesoCaminhao"),
-                    rs.getString("numLicencaCaminhao")
+                    rs.getDouble("qtdPesoCaminhao")
                 });
             }    
         } catch(SQLException e){
-            throw new SQLException("Error SQLException (CtrlCaminhao): " + e.getMessage());
+            throw new SQLException(e.getMessage());
         } catch(Exception e){
-            throw new Exception("Error Exception (CtrlCaminhao): " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public boolean insertRecord(Caminhao caminhao) throws SQLException, Exception{
+        try {
+            CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
+            java.sql.Connection con = ConnectionBd.getConnection();
+            if(caminhao.getNumLicencaCaminhao() != "" && caminhao.getQtdVolumeCaminhao() > 0 && caminhao.getQtdPesoCaminhao() > 0){
+                if(caminhaoPersistencia.insertRecord(caminhao, con) != 0){
+                    Util.showMessage("Caminhao inserido com sucesso !");
+                }
+            } else {
+                throw new Exception("É preciso preencher todos os campos");
+            }
+            return true;
+        } catch(SQLException e){
+            throw new SQLException(e.getMessage());
+        } catch(Exception e){
+            throw new Exception(e.getMessage());
         }
     }
 }

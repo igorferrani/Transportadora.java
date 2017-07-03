@@ -12,7 +12,6 @@ package Model;
 public class Armazem {
     private int codArmazem;
     private int codEndereco;
-    private int numArmazem;
     private String nomArmazem;
 
     public int getCodArmazem() {
@@ -29,14 +28,6 @@ public class Armazem {
 
     public void setCodEndereco(int codEndereco) {
         this.codEndereco = codEndereco;
-    }
-
-    public int getNumArmazem() {
-        return numArmazem;
-    }
-
-    public void setNumArmazem(int numArmazem) {
-        this.numArmazem = numArmazem;
     }
 
     public String getNomArmazem() {

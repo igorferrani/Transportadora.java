@@ -5,7 +5,7 @@
  */
 package persistencia;
 
-import Model.Armazem;
+import Model.Endereco;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,35 +15,36 @@ import java.sql.Statement;
  *
  * @author Igor Ferrani
  */
-public class ArmazemPersistencia {
+public class EnderecoPersistencia {
     
-    public int insertRecord(Armazem armazem, java.sql.Connection con) throws Exception{
-        int codArmazem = 0;
+    public int insertRecord(Endereco endereco, java.sql.Connection con) throws Exception{
+        int codEndereco = 0;
         try {
             ConnectionBd connectionBd = new ConnectionBd();
             con = connectionBd.getConnection();
             
-            String sql = "INSERT INTO armazem VALUES(0, ?, ?)";
+            String sql = "INSERT INTO endereco VALUES(0, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setString(1, armazem.getNomArmazem());
-            stmt.setDouble(2, armazem.getCodEndereco());
+            stmt.setInt(1, endereco.getCodBairro());
+            stmt.setInt(2, endereco.getNumEndereco());
+            stmt.setString(3, endereco.getDscEndereco());
             stmt.executeUpdate();
             
             ResultSet generatedKeys = stmt.getGeneratedKeys();
             if (generatedKeys.next())
-                codArmazem = generatedKeys.getInt(1);
+                codEndereco = generatedKeys.getInt(1);
             
         } catch (SQLException e){
             throw new Exception("Error SQLException ("+this.getClass().getName()+"): " + e.getMessage());
         } catch (Exception e){
             throw new Exception("Error Exception ("+this.getClass().getName()+"): " + e.getMessage());
         }
-        return codArmazem;
+        return codEndereco;
     }
     
     public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
         try {            
-            String sql = "SELECT * FROM armazem";
+            String sql = "SELECT * FROM endereco";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             return rs;

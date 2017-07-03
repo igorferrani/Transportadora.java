@@ -28,4 +28,8 @@ public class Pais {
     public void setNomPais(String nomPais) {
         this.nomPais = nomPais;
     }
+    
+    public String toString(){
+        return nomPais;
+    }
 }

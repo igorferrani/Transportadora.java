@@ -8,11 +8,15 @@ package View;
 import Controller.CtrlArmazem;
 import Controller.CtrlBairro;
 import Controller.CtrlCidade;
+import Controller.CtrlCliente;
+import Controller.CtrlDeposito;
 import Controller.CtrlEstado;
 import Controller.CtrlPais;
 import Model.Armazem;
 import Model.Bairro;
 import Model.Cidade;
+import Model.Cliente;
+import Model.Deposito;
 import Model.Endereco;
 import Model.Estado;
 import Model.Pais;
@@ -24,12 +28,12 @@ import transportadoraifes.Util;
  *
  * @author Igor Ferrani
  */
-public class FormCadastroArmazem extends javax.swing.JFrame {
+public class FormCadastroDeposito extends javax.swing.JFrame {
 
     /**
      * Creates new form FormCadastroCaminhao
      */
-    public FormCadastroArmazem() {
+    public FormCadastroDeposito() {
         initComponents();
         init();
     }
@@ -44,11 +48,10 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        inputNomArmazem = new javax.swing.JTextField();
+        inputNomDeposito = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tableArmazem = new javax.swing.JTable();
-        btnRemoverCaminhao = new javax.swing.JButton();
+        inputCliente = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         inputEnderecoPais = new javax.swing.JComboBox<>();
@@ -63,21 +66,24 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
         inputEnderecoDsc = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         btnSalvarAlteracoes = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(560, 400));
         setResizable(false);
         setSize(new java.awt.Dimension(700, 300));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações do Armazem"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Informações do depósito"));
 
-        inputNomArmazem.addActionListener(new java.awt.event.ActionListener() {
+        inputNomDeposito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputNomArmazemActionPerformed(evt);
+                inputNomDepositoActionPerformed(evt);
             }
         });
 
-        jLabel1.setText("Nome do armazem");
+        jLabel1.setText("Nome do depósito");
+
+        jLabel2.setText("Empresa/Cliente");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,45 +92,29 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(inputNomArmazem, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputNomDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(inputCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addGap(2, 2, 2)
-                .addComponent(inputNomArmazem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputNomDeposito, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(inputCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        tableArmazem.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Código", "Nome"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane1.setViewportView(tableArmazem);
-
-        btnRemoverCaminhao.setText("Remover");
-        btnRemoverCaminhao.setEnabled(false);
-        btnRemoverCaminhao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRemoverCaminhaoActionPerformed(evt);
-            }
-        });
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Endereço"));
 
@@ -172,29 +162,29 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(inputEnderecoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel12)
-                    .addComponent(inputEnderecoDsc))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(inputEnderecoEstado, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel10)
-                                        .addGap(107, 107, 107))
-                                    .addComponent(inputEnderecoBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(0, 54, Short.MAX_VALUE))
-                                    .addComponent(inputEnderecoNumero)))
-                            .addComponent(inputEnderecoCidade, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jLabel11)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(inputEnderecoCidade, 0, 231, Short.MAX_VALUE)
+                                .addContainerGap())))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel12)
+                            .addComponent(inputEnderecoDsc, javax.swing.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(inputEnderecoBairro, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(0, 59, Short.MAX_VALUE))
+                            .addComponent(inputEnderecoNumero))
                         .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
@@ -215,7 +205,7 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(inputEnderecoCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
@@ -230,13 +220,20 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                         .addComponent(jLabel12)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(inputEnderecoDsc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         btnSalvarAlteracoes.setText("Salvar alteraões");
         btnSalvarAlteracoes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSalvarAlteracoesActionPerformed(evt);
+            }
+        });
+
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
             }
         });
 
@@ -249,12 +246,11 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnRemoverCaminhao, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnSalvarAlteracoes, javax.swing.GroupLayout.Alignment.TRAILING))))
+                        .addComponent(btnCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnSalvarAlteracoes)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -264,25 +260,19 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(16, 16, 16)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSalvarAlteracoes)
-                .addGap(60, 60, 60)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addComponent(btnRemoverCaminhao)
-                .addGap(30, 30, 30))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSalvarAlteracoes)
+                    .addComponent(btnCancelar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputNomArmazemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomArmazemActionPerformed
+    private void inputNomDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomDepositoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_inputNomArmazemActionPerformed
-
-    private void btnRemoverCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverCaminhaoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRemoverCaminhaoActionPerformed
+    }//GEN-LAST:event_inputNomDepositoActionPerformed
 
     private void inputEnderecoPaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputEnderecoPaisActionPerformed
         // TODO add your handling code here:
@@ -304,28 +294,35 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                 
         
         try {
-            if(inputEnderecoBairro.getSelectedIndex() >= 0){
-                String nomArmazem = inputNomArmazem.getText();
-                int codBairro = inputEnderecoBairro.getItemAt(inputEnderecoBairro.getSelectedIndex()).getCodBairro();
-                String dscEndereco = inputEnderecoDsc.getText();
-                int numEndereco = 0;
-                if(!"".equals(inputEnderecoNumero.getText()))
-                    numEndereco = Integer.parseInt(inputEnderecoNumero.getText());
-                
-                Armazem armazem = new Armazem();
-                armazem.setNomArmazem(nomArmazem);
+            if(inputCliente.getSelectedIndex() >= 0){
+                if(inputEnderecoBairro.getSelectedIndex() >= 0){
+                    String nomDeposito = inputNomDeposito.getText();
+                    int codBairro = inputEnderecoBairro.getItemAt(inputEnderecoBairro.getSelectedIndex()).getCodBairro();
+                    String dscEndereco = inputEnderecoDsc.getText();
+                    int numEndereco = 0;
+                    int codCliente = inputCliente.getItemAt(inputCliente.getSelectedIndex()).getCodCliente();
+                    
+                    if(!"".equals(inputEnderecoNumero.getText()))
+                        numEndereco = Integer.parseInt(inputEnderecoNumero.getText());
 
-                Endereco endereco = new Endereco();
-                endereco.setCodBairro(codBairro);
-                endereco.setDscEndereco(dscEndereco);
-                endereco.setNumEndereco(numEndereco);
+                    Deposito deposito = new Deposito();
+                    deposito.setNomDeposito(nomDeposito);
+                    deposito.setCodCliente(codCliente);
 
-                CtrlArmazem ctrlArmazem = new CtrlArmazem();
-                ctrlArmazem.insertRecord(armazem, endereco);
+                    Endereco endereco = new Endereco();
+                    endereco.setCodBairro(codBairro);
+                    endereco.setDscEndereco(dscEndereco);
+                    endereco.setNumEndereco(numEndereco);
 
-                this.setVisible(false);
+                    CtrlDeposito ctrlDeposito = new CtrlDeposito();
+                    ctrlDeposito.insertRecord(deposito, endereco);
+
+                    this.setVisible(false);
+                } else {
+                    Util.showMessage("Informe o endereço do armazem");
+                }
             } else {
-                Util.showMessage("Informe o endereço do armazem");
+                Util.showMessage("Informe a empresa/cliente");
             }
         } catch(SQLException e){
             Util.showCatch(e.getMessage());
@@ -333,6 +330,11 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
             Util.showCatch(e.getMessage());
         }
     }//GEN-LAST:event_btnSalvarAlteracoesActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -351,37 +353,37 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FormCadastroArmazem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormCadastroDeposito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FormCadastroArmazem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormCadastroDeposito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FormCadastroArmazem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormCadastroDeposito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FormCadastroArmazem.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormCadastroDeposito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormCadastroArmazem().setVisible(true);
+                new FormCadastroDeposito().setVisible(true);
             }
         });
     }
     
     private void init(){
-        updateTable();
+        setSelectCliente();
         setSelectPais();
     }
     
-    private void updateTable(){
-        DefaultTableModel model = (DefaultTableModel)tableArmazem.getModel();        
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();        
-        CtrlArmazem ctrlArmazem = new CtrlArmazem();
-        try{                    
-            ctrlArmazem.setDataTable(model);
+    public void setSelectCliente(){
+        inputCliente.removeAllItems();
+        CtrlCliente ctrlCliente = new CtrlCliente();
+        try {
+            ctrlCliente.setComboBox(inputCliente);
         } catch(SQLException e){
             Util.showCatch(e.getMessage());
         } catch(Exception e){
@@ -453,25 +455,25 @@ public class FormCadastroArmazem extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnRemoverCaminhao;
+    private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvarAlteracoes;
+    private javax.swing.JComboBox<Cliente> inputCliente;
     private javax.swing.JComboBox<Bairro> inputEnderecoBairro;
     private javax.swing.JComboBox<Cidade> inputEnderecoCidade;
     private javax.swing.JTextField inputEnderecoDsc;
     private javax.swing.JComboBox<Estado> inputEnderecoEstado;
     private javax.swing.JTextField inputEnderecoNumero;
     private javax.swing.JComboBox<Pais> inputEnderecoPais;
-    private javax.swing.JTextField inputNomArmazem;
+    private javax.swing.JTextField inputNomDeposito;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tableArmazem;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,12 +6,15 @@
 package Controller;
 
 import Model.Deposito;
+import Model.Endereco;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import persistencia.DepositoPersistencia;
 import persistencia.ConnectionBd;
+import persistencia.EnderecoPersistencia;
+import transportadoraifes.Util;
 
 /**
  *
@@ -86,6 +89,36 @@ public class CtrlDeposito {
             throw new Exception(">> Error SQLException (CtrlArmazem): " + e.getMessage());
         } catch(Exception e){
             throw new Exception(">> Error Exception (CtrlArmazem): " + e.getMessage());
+        }
+    }
+    
+    public boolean insertRecord(Deposito deposito, Endereco endereco) throws SQLException, Exception{
+        try {
+            DepositoPersistencia depositoPersistencia = new DepositoPersistencia();
+            java.sql.Connection con = ConnectionBd.getConnection();
+            
+            con.setAutoCommit(false); //transaction block start
+            
+            if(!"".equals(deposito.getNomDeposito()) && endereco.getNumEndereco() != 0){
+                // Grava o endereco do Armazem
+                EnderecoPersistencia enderecoPersistencia = new EnderecoPersistencia();
+                int codEndereco = enderecoPersistencia.insertRecord(endereco, con);
+                if(codEndereco != 0){
+                    deposito.setCodEndereco(codEndereco);
+                    if(depositoPersistencia.insertRecord(deposito, con) != 0){
+                        Util.showMessage("Depósito inserido com sucesso !");
+                    }
+                }
+            } else {
+                throw new Exception("É preciso preencher todos os campos");
+            }
+            con.commit(); //transaction block end
+            con.close();
+            return true;
+        } catch(SQLException e){
+            throw new SQLException(e.getMessage());
+        } catch(Exception e){
+            throw new Exception(e.getMessage());
         }
     }
 }

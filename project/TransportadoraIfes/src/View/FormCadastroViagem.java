@@ -376,6 +376,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         setSelectCaminhao();
         setDataHoraDespacho();
         calculaTotalViagem();
+        blockModifyArmazem();
     }
     
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -391,6 +392,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         dataListViagem.addElement(remessa);
         listViagem.setModel(dataListViagem);
         calculaTotalViagem();
+        blockModifyArmazem();
     }
     
     public void removeListItem(int index){
@@ -398,6 +400,7 @@ public class FormCadastroViagem extends javax.swing.JFrame {
             dataListViagem.remove(index);
             listViagem.setModel(dataListViagem);
             calculaTotalViagem();
+            blockModifyArmazem();
         }
     }
     
@@ -453,6 +456,15 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         if(inputArmazem.getSelectedIndex() >= 0)
             return inputArmazem.getItemAt(inputArmazem.getSelectedIndex());
         return null;
+    }
+    
+    public void blockModifyArmazem(){
+        int len = dataListViagem.getSize();
+        boolean enabled = false;
+        if(len <= 0)
+            enabled = true;
+        
+        inputArmazem.setEnabled(enabled);
     }
     
     

@@ -12,6 +12,7 @@ import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import persistencia.ClientePersistencia;
 import persistencia.ConnectionBd;
+import transportadoraifes.Util;
 
 /**
  *
@@ -69,22 +70,44 @@ public class CtrlCliente {
     public void setDataTable(DefaultTableModel tableModel) throws SQLException, Exception{
         
         ClientePersistencia clientePersistencia = new ClientePersistencia();
-        ConnectionBd connectionBd = new ConnectionBd();
-        java.sql.Connection con = connectionBd.getConnection();
-        ResultSet rs;
+        java.sql.Connection con = ConnectionBd.getConnection();
         
         try {
-            rs  = clientePersistencia.selectAllRecords(con);
+            ResultSet rs  = clientePersistencia.selectAllRecords(con);
             while(rs.next()){
                 tableModel.addRow( new Object[] { 
                     rs.getInt("codCliente") , 
-                    rs.getString("nomCliente")
+                    rs.getString("nomCliente"),
+                    rs.getLong("numCnpjCliente"),
+                    rs.getLong("numCpfCliente")
                 });
             }    
         } catch(SQLException e){
             throw new Exception(">> Error SQLException (CtrlCliente): " + e.getMessage());
         } catch(Exception e){
             throw new Exception(">> Error Exception (CtrlCliente): " + e.getMessage());
+        }
+    }
+    
+    public boolean insertRecord(Cliente cliente) throws SQLException, Exception{
+        try {
+            java.sql.Connection con = ConnectionBd.getConnection();
+            
+            con.setAutoCommit(false); //transaction block start
+            
+            // Grava o endereco do Armazem
+            ClientePersistencia clientePersistencia = new ClientePersistencia();
+            clientePersistencia.insertRecord(cliente, con);
+            
+            Util.showMessage("Cliente cadastrado com sucesso !");
+                
+            con.commit(); //transaction block end
+            con.close();
+            return true;
+        } catch(SQLException e){
+            throw new SQLException(e.getMessage());
+        } catch(Exception e){
+            throw new Exception(e.getMessage());
         }
     }
 }

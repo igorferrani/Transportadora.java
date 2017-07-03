@@ -37,4 +37,8 @@ public class Cidade {
     public void setNomCidade(String nomCidade) {
         this.nomCidade = nomCidade;
     }
+    
+    public String toString(){
+        return nomCidade;
+    }
 }

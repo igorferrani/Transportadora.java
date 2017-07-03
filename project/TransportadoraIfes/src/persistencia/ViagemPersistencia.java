@@ -19,7 +19,10 @@ public class ViagemPersistencia {
     
     public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
         try {            
-            String sql = "SELECT * FROM viagem ORDER BY codViagem DESC";
+            String sql = "SELECT viagem.*, armazem.nomArmazem, caminhao.numLicencaCaminhao FROM viagem "
+                    + "INNER JOIN armazem ON armazem.codArmazem = viagem.codArmazem "
+                    + "INNER JOIN caminhao ON caminhao.codCaminhao = viagem.codCaminhao "
+                    + "ORDER BY codViagem DESC";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             return rs;

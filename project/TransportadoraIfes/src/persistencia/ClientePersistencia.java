@@ -44,4 +44,26 @@ public class ClientePersistencia {
             throw new Exception("Error Exception ("+getClass().getName()+"): " + e.getMessage());
         }
     }
+    
+    public int insertRecord(Cliente cliente, java.sql.Connection con) throws Exception{
+        int codCaminhao = 0;
+        try {
+            String sql = "INSERT INTO cliente VALUES(0, ?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setString(1, cliente.getNomCliente());
+            stmt.setInt(2, cliente.getNumCnpjCliente());
+            stmt.setInt(3, cliente.getNumCpfCliente());
+            stmt.executeUpdate();
+            
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next())
+                codCaminhao = generatedKeys.getInt(1);
+            
+        } catch (SQLException e){
+            throw new Exception("Error SQLException ("+this.getClass().getName()+"): " + e.getMessage());
+        } catch (Exception e){
+            throw new Exception("Error Exception ("+this.getClass().getName()+"): " + e.getMessage());
+        }
+        return codCaminhao;
+    }
 }

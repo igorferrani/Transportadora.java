@@ -8,7 +8,6 @@ package View;
 import Controller.CtrlCaminhao;
 import Model.Caminhao;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import persistencia.CaminhaoPersistencia;
@@ -49,10 +48,10 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
         tableCaminhao = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         btnRemoverCaminhao = new javax.swing.JButton();
+        btnFecharJanela = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(560, 400));
-        setPreferredSize(new java.awt.Dimension(550, 300));
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(560, 450));
         setResizable(false);
         setSize(new java.awt.Dimension(700, 300));
 
@@ -131,11 +130,11 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Código", "Qtd. Volume", "Qtd. Peso", "Licença"
+                "Código", "Licença", "Qtd. Peso", "Qtd. Volume"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -154,6 +153,13 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
             }
         });
 
+        btnFecharJanela.setText("Fechar janela");
+        btnFecharJanela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFecharJanelaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,11 +172,13 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnRemoverCaminhao))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnFecharJanela)
+                                    .addComponent(btnRemoverCaminhao))))
                         .addGap(40, 40, 40))))
         );
         layout.setVerticalGroup(
@@ -184,7 +192,9 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnRemoverCaminhao)
-                .addGap(113, 113, 113))
+                .addGap(18, 18, 18)
+                .addComponent(btnFecharJanela)
+                .addGap(50, 50, 50))
         );
 
         pack();
@@ -199,17 +209,18 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
         int qtdPesoCaminhao = (int) inputQtdPesoCaminhao.getValue();
         String numLicencaCaminhao = (String) inputNumLicencaCaminhao.getText();
         
-        Caminhao caminhao = new Caminhao();
-        CaminhaoPersistencia caminhaoPersistencia = new CaminhaoPersistencia();
-        caminhao.setQtdVolumeCaminhao(qtdVolumeCaminhao);
-        caminhao.setQtdPesoCaminhao(qtdPesoCaminhao);
-        caminhao.setNumLicencaCaminhao(numLicencaCaminhao);
-        
         try {
-            caminhaoPersistencia.insertRecord(caminhao);
-            JOptionPane.showMessageDialog(null, "Caminhao inserido com sucesso !");
-        } catch (Exception e){
-            JOptionPane.showMessageDialog(null, "Não foi possível inserir o caminhão.");
+            Caminhao caminhao = new Caminhao();
+            caminhao.setQtdVolumeCaminhao(qtdVolumeCaminhao);
+            caminhao.setQtdPesoCaminhao(qtdPesoCaminhao);
+            caminhao.setNumLicencaCaminhao(numLicencaCaminhao);
+
+            CtrlCaminhao ctrlCaminhao = new CtrlCaminhao();
+            ctrlCaminhao.insertRecord(caminhao);
+        } catch(SQLException e){
+            Util.showCatch(e.getMessage());
+        } catch(Exception e){
+            Util.showCatch(e.getMessage());
         }
         
         updateTable();
@@ -232,6 +243,11 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
     private void btnRemoverCaminhaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverCaminhaoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRemoverCaminhaoActionPerformed
+
+    private void btnFecharJanelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFecharJanelaActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnFecharJanelaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -270,6 +286,7 @@ public class FormCadastroCaminhao extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdicionarCaminhao;
+    private javax.swing.JButton btnFecharJanela;
     private javax.swing.JButton btnRemoverCaminhao;
     private javax.swing.JTextField inputNumLicencaCaminhao;
     private javax.swing.JSpinner inputQtdPesoCaminhao;

@@ -6,14 +6,15 @@
 package Controller;
 
 import Model.Armazem;
-import Model.Caminhao;
+import Model.Endereco;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import persistencia.ArmazemPersistencia;
 import persistencia.ConnectionBd;
-import transportadoraifes.Item;
+import persistencia.EnderecoPersistencia;
+import transportadoraifes.Util;
 
 /**
  *
@@ -24,8 +25,7 @@ public class CtrlArmazem {
     public void setComboBox(JComboBox inputSelect) throws SQLException, Exception{
         
         ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia();
-        ConnectionBd connectionBd = new ConnectionBd();
-        java.sql.Connection con = connectionBd.getConnection();
+        java.sql.Connection con = ConnectionBd.getConnection();
         ResultSet rs;
         
         try {
@@ -48,22 +48,51 @@ public class CtrlArmazem {
     public void setDataTable(DefaultTableModel tableModel) throws SQLException, Exception{
         
         ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia();
-        ConnectionBd connectionBd = new ConnectionBd();
-        java.sql.Connection con = connectionBd.getConnection();
+        java.sql.Connection con = ConnectionBd.getConnection();
         ResultSet rs;
         
         try {
             rs  = armazemPersistencia.selectAllRecords(con);
             while(rs.next()){
                 tableModel.addRow( new Object[] { 
-                    rs.getInt("codArmazem") , 
+                    rs.getInt("codArmazem"),
                     rs.getString("nomArmazem")
                 });
-            }    
+            }
         } catch(SQLException e){
-            throw new Exception(">> Error SQLException (CtrlArmazem): " + e.getMessage());
+            throw new Exception(e.getMessage());
         } catch(Exception e){
-            throw new Exception(">> Error Exception (CtrlArmazem): " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public boolean insertRecord(Armazem armazem, Endereco endereco) throws SQLException, Exception{
+        try {
+            ArmazemPersistencia armazemPersistencia = new ArmazemPersistencia();
+            java.sql.Connection con = ConnectionBd.getConnection();
+            
+            con.setAutoCommit(false); //transaction block start
+            
+            if(!"".equals(armazem.getNomArmazem()) && endereco.getNumEndereco() != 0){
+                // Grava o endereco do Armazem
+                EnderecoPersistencia enderecoPersistencia = new EnderecoPersistencia();
+                int codEndereco = enderecoPersistencia.insertRecord(endereco, con);
+                if(codEndereco != 0){
+                    armazem.setCodEndereco(codEndereco);
+                    if(armazemPersistencia.insertRecord(armazem, con) != 0){
+                        Util.showMessage("Armazem inserido com sucesso !");
+                    }
+                }
+            } else {
+                throw new Exception("É preciso preencher todos os campos");
+            }
+            con.commit(); //transaction block end
+            con.close();
+            return true;
+        } catch(SQLException e){
+            throw new SQLException(e.getMessage());
+        } catch(Exception e){
+            throw new Exception(e.getMessage());
         }
     }
 }

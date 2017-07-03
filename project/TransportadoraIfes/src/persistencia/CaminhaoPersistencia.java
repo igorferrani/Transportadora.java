@@ -6,10 +6,10 @@
 package persistencia;
 
 import Model.Caminhao;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 
 /**
  *
@@ -17,33 +17,30 @@ import java.util.ArrayList;
  */
 public class CaminhaoPersistencia {
     
-    public boolean insertRecord(Caminhao caminhao) throws Exception{
-        Statement stmt = null;
-        java.sql.Connection con = null;
-        try {
-            ConnectionBd connectionBd = new ConnectionBd();
-            con = connectionBd.getConnection();
-            
+    public int insertRecord(Caminhao caminhao, java.sql.Connection con) throws Exception{
+        int codCaminhao = 0;
+        try {            
             double qtdVolumeCaminhao = caminhao.getQtdVolumeCaminhao();
             double qtdPesoCaminhao = caminhao.getQtdPesoCaminhao();
             String numLicencaCaminhao = caminhao.getNumLicencaCaminhao();
             
-            String sql = "INSERT INTO caminhao VALUES(0, "+
-                    qtdVolumeCaminhao+", "+
-                    qtdPesoCaminhao+ ", '"+
-                    numLicencaCaminhao+"')";
+            String sql = "INSERT INTO caminhao VALUES(0, ?, ?, ?)";
+            PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            stmt.setDouble(1, qtdVolumeCaminhao);
+            stmt.setDouble(2, qtdPesoCaminhao);
+            stmt.setString(3, numLicencaCaminhao);
+            stmt.executeUpdate();
             
-            stmt = con.createStatement();
-            stmt.executeUpdate(sql);
-            con.close();
-            
-            return true;
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next())
+                codCaminhao = generatedKeys.getInt(1);
             
         } catch (SQLException e){
-            throw new Exception("Error SQLException (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error SQLException ("+this.getClass().getName()+"): " + e.getMessage());
         } catch (Exception e){
-            throw new Exception("Error Exception (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error Exception ("+this.getClass().getName()+"): " + e.getMessage());
         }
+        return codCaminhao;
     }
     
     public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
@@ -53,9 +50,9 @@ public class CaminhaoPersistencia {
             ResultSet rs = stmt.executeQuery(sql);
             return rs;
         } catch (SQLException e){
-            throw new Exception("Error SQLException (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error SQLException ("+this.getClass().getName()+"): " + e.getMessage());
         } catch (Exception e){
-            throw new Exception("Error Exception (CaminhaoPersistencia): " + e.getMessage());
+            throw new Exception("Error Exception ("+this.getClass().getName()+"): " + e.getMessage());
         }
     }
 }
