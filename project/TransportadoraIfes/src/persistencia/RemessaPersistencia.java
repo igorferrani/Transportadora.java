@@ -20,11 +20,12 @@ public class RemessaPersistencia {
     public int insertRecord(Remessa remessa, java.sql.Connection con) throws Exception{
         int codRemessa = 0;
         try {
-            String insertRemessa = "INSERT INTO remessa VALUES(0, ?, ?, ?)";
+            String insertRemessa = "INSERT INTO remessa VALUES(0, ?, ?, ?, ?)";
             PreparedStatement stmt = con.prepareStatement(insertRemessa, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, remessa.getCodViagem());
             stmt.setInt(2, remessa.getCodDeposito());
             stmt.setString(3, remessa.getNumRemessa());
+            stmt.setString(4, remessa.getDataEntrega() + " " + remessa.getHoraEntrega());
             stmt.executeUpdate();
             
             ResultSet generatedKeys = stmt.getGeneratedKeys();

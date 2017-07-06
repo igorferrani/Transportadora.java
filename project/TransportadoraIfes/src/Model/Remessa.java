@@ -20,6 +20,24 @@ public class Remessa {
     private DefaultListModel arrayItemRemessa;
     private String nomCliente;
     private String nomDeposito;
+    private String dataEntrega;
+    private String horaEntrega;
+
+    public String getDataEntrega() {
+        return dataEntrega;
+    }
+
+    public void setDataEntrega(String dataEntrega) {
+        this.dataEntrega = dataEntrega;
+    }
+
+    public String getHoraEntrega() {
+        return horaEntrega;
+    }
+
+    public void setHoraEntrega(String horaEntrega) {
+        this.horaEntrega = horaEntrega;
+    }
     
     public String getNomCliente() {
         return nomCliente;

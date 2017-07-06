@@ -65,7 +65,6 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
         inserirItem = new javax.swing.JButton();
         removerItem = new javax.swing.JButton();
         inputProduto = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -75,7 +74,6 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
         inputValorProduto = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         inputQtdProduto = new javax.swing.JSpinner();
-        inputQtdEstoque = new javax.swing.JTextField();
         inputHoraEntrega = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
         inputDataEntrega = new javax.swing.JFormattedTextField();
@@ -120,8 +118,6 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Qtd. em estoque");
-
         jLabel5.setText("Produto");
 
         jLabel6.setText("Valor R$");
@@ -147,13 +143,15 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
 
         jLabel8.setText("Qtd. à transportar");
 
-        inputQtdEstoque.setEnabled(false);
-
         inputHoraEntrega.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getTimeInstance(java.text.DateFormat.SHORT))));
 
         jLabel7.setText("Hora de entrega");
 
-        inputDataEntrega.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        try {
+            inputDataEntrega.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         inputDataEntrega.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputDataEntregaActionPerformed(evt);
@@ -173,7 +171,7 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
-                                .addGap(0, 130, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(inputCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,41 +182,37 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(inputNumRemessa, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel9)
+                            .addComponent(inputDataEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(removerItem, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(inserirItem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(inputHoraEntrega))
+                        .addGap(184, 184, 184))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel9)
-                                    .addComponent(inputDataEntrega, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE))
-                                    .addComponent(inputHoraEntrega)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel5)
                                     .addComponent(inputProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6)
-                                    .addComponent(inputValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(inputQtdEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(inputValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel8)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(inputQtdProduto)))
+                            .addComponent(jScrollPane2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel8)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(inputQtdProduto))))
+                            .addComponent(removerItem, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(inserirItem, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -259,11 +253,7 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jLabel8)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(inputQtdProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(inputQtdEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(inputQtdProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -304,7 +294,7 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 .addGap(17, 17, 17))
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 36, Short.MAX_VALUE))
+                .addGap(0, 28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,12 +311,6 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void removerItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerItemActionPerformed
-        // TODO add your handling code here:
-        int index = listItem.getSelectedIndex();
-        removeListItem(index);
-    }//GEN-LAST:event_removerItemActionPerformed
-
     private void btnCancelarRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarRemessaActionPerformed
         this.setVisible(false);
     }//GEN-LAST:event_btnCancelarRemessaActionPerformed
@@ -341,6 +325,8 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
             String numRemessa = inputNumRemessa.getText();
             String nomCliente = inputCliente.getItemAt(inputCliente.getSelectedIndex()).getNomCliente();
             String nomDeposito = inputDeposito.getItemAt(inputDeposito.getSelectedIndex()).getNomDeposito();
+            String dataEntrega = inputDataEntrega.getText();
+            String horaEntrega = inputHoraEntrega.getText();
             
             // insere um novo
             Remessa remessa = new Remessa();
@@ -349,6 +335,8 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
             remessa.setArrayItemRemessa(dataListItem);
             remessa.setNomCliente(nomCliente);
             remessa.setNomDeposito(nomDeposito);
+            remessa.setDataEntrega(dataEntrega);
+            remessa.setHoraEntrega(horaEntrega);
             
             if(dataListItem.getSize() > 0){
                 formCadastroViagem.addListItem(remessa);
@@ -358,6 +346,16 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
             }
         //}
     }//GEN-LAST:event_btnSalvarAlteracoesActionPerformed
+
+    private void inputDataEntregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataEntregaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputDataEntregaActionPerformed
+
+    private void inputClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputClienteActionPerformed
+        // TODO add your handling code here:
+        setSelectDeposito();
+        setSelectProduto();
+    }//GEN-LAST:event_inputClienteActionPerformed
 
     private void inputNumRemessaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNumRemessaActionPerformed
         // TODO add your handling code here:
@@ -372,24 +370,20 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_inputProdutoActionPerformed
 
-    private void inputDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDepositoActionPerformed
-        // codigo
-    }//GEN-LAST:event_inputDepositoActionPerformed
-
-    private void inputClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputClienteActionPerformed
+    private void removerItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removerItemActionPerformed
         // TODO add your handling code here:
-        setSelectDeposito();
-        setSelectProduto();
-    }//GEN-LAST:event_inputClienteActionPerformed
+        int index = listItem.getSelectedIndex();
+        removeListItem(index);
+    }//GEN-LAST:event_removerItemActionPerformed
 
     private void inserirItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inserirItemActionPerformed
         if(inputProduto.getSelectedIndex() >= 0){
             int codProduto = inputProduto.getItemAt(inputProduto.getSelectedIndex()).getCodProduto();
             Produto produto = inputProduto.getItemAt(inputProduto.getSelectedIndex());
             int qtdProduto = (Integer) inputQtdProduto.getValue();
-            double qtdProdutoEstoque = Double.parseDouble(inputQtdEstoque.getText());
+            //double qtdProdutoEstoque = Double.parseDouble(inputQtdEstoque.getText());
 
-            if(qtdProdutoEstoque >= qtdProduto){
+            //if(qtdProdutoEstoque >= qtdProduto){
                 if(qtdProduto > 0){
                     ItemRemessa itemRemessa = new ItemRemessa();
                     itemRemessa.setCodProduto(codProduto);
@@ -400,20 +394,20 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 } else {
                     Util.showMessage("É preciso informar a quantidade para o produto");
                 }
-            } else {
+            /*} else {
                 Util.showMessage("Não existe quantidade suficiente no armazem atual");
-            }
+            }*/
         } else {
             Util.showMessage("Informe o produto");
         }
     }//GEN-LAST:event_inserirItemActionPerformed
 
-    private void inputDataEntregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDataEntregaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputDataEntregaActionPerformed
+    private void inputDepositoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputDepositoActionPerformed
+        // codigo
+    }//GEN-LAST:event_inputDepositoActionPerformed
     
-    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
     
     public void setDataHoraDespacho(){
         LocalDateTime now = LocalDateTime.now();
@@ -522,10 +516,8 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
                 estoque.setCodProduto(inputProduto.getItemAt(inputProduto.getSelectedIndex()).getCodProduto());
 
                 CtrlEstoque ctrlEstoque = new CtrlEstoque();
-                ctrlEstoque.setInputQtdProdutoPorEstoque(inputQtdEstoque, estoque);
+                //ctrlEstoque.setInputQtdProdutoPorEstoque(inputQtdEstoque, estoque);
             }
-        } catch(SQLException e){
-            Util.showCatch(e.getMessage());
         } catch(Exception e){
             Util.showCatch(e.getMessage());
         }
@@ -592,13 +584,11 @@ public class FormCadastroRemessa extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField inputHoraEntrega;
     private javax.swing.JTextField inputNumRemessa;
     private javax.swing.JComboBox<Produto> inputProduto;
-    private javax.swing.JTextField inputQtdEstoque;
     private javax.swing.JSpinner inputQtdProduto;
     private javax.swing.JTextField inputValorProduto;
     private javax.swing.JButton inserirItem;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

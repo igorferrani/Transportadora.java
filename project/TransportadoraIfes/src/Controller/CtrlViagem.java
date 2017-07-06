@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import Model.Caminhao;
 import Model.Estoque;
 import Model.ItemRemessa;
 import Model.Remessa;
@@ -112,6 +113,30 @@ public class CtrlViagem {
                     rs.getString("numViagem"),
                     rs.getDouble("qtdPesoViagem"),
                     rs.getDouble("qtdVolumeViagem")
+                });
+            }    
+        } catch(SQLException e){
+            throw new SQLException("Error SQLException (CtrlViagem): " + e.getMessage());
+        } catch(Exception e){
+            throw new Exception("Error Exception (CtrlViagem): " + e.getMessage());
+        }
+    }
+    
+    public void setDTRelatorioQtdViagemCaminhao(DefaultTableModel tableModel, Caminhao caminhao) throws SQLException, Exception{
+        
+        ViagemPersistencia viagemPersistencia = new ViagemPersistencia();
+        java.sql.Connection con = ConnectionBd.getConnection();
+        ResultSet rs;
+        
+        try {
+            rs  = viagemPersistencia.selectDTRelatorioQtdViagemCaminhao(caminhao, con);
+            while(rs.next()){
+                tableModel.addRow( new Object[] { 
+                    rs.getInt("codCaminhao"),
+                    rs.getDouble("quantidadeViagem"),
+                    rs.getString("numLicencaCaminhao"),
+                    rs.getDouble("qtdVolumeCaminhao"),
+                    rs.getDouble("qtdPesoCaminhao")
                 });
             }    
         } catch(SQLException e){

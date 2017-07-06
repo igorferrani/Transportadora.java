@@ -151,7 +151,11 @@ public class FormCadastroViagem extends javax.swing.JFrame {
 
         jLabel5.setText("Hora de despacho");
 
-        inputDataDespacho.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        try {
+            inputDataDespacho.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
         inputDataDespacho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 inputDataDespachoActionPerformed(evt);
@@ -325,11 +329,15 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         int codCaminhao = inputCaminhao.getItemAt(inputCaminhao.getSelectedIndex()).getCodCaminhao();
         int codArmazem = inputArmazem.getItemAt(inputArmazem.getSelectedIndex()).getCodArmazem();
         String numViagem = inputNumViagem.getText();
+        String dataDespacho = inputDataDespacho.getText();
+        String horaDespacho = inputHoraDespacho.getText();
         
         Viagem viagem = new Viagem();
         viagem.setCodCaminhao(codCaminhao);
         viagem.setCodArmazem(codArmazem);
         viagem.setNumViagem(numViagem);
+        viagem.setDataDespacho(dataDespacho);
+        viagem.setHoraDespacho(horaDespacho);
        
         if(dataListViagem.getSize() > 0){
             CtrlViagem ctrlViagem = new CtrlViagem();
@@ -379,8 +387,8 @@ public class FormCadastroViagem extends javax.swing.JFrame {
         blockModifyArmazem();
     }
     
-    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH:mm");
+    private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter hourFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
     
     public void setDataHoraDespacho(){
         LocalDateTime now = LocalDateTime.now();

@@ -16,6 +16,24 @@ public class Viagem {
     private String numViagem;
     private double qtdPesoViagem;
     private double qtdVolumeViagem;
+    private String dataDespacho;
+    private String horaDespacho;
+
+    public String getDataDespacho() {
+        return dataDespacho;
+    }
+
+    public void setDataDespacho(String dataDespacho) {
+        this.dataDespacho = dataDespacho;
+    }
+
+    public String getHoraDespacho() {
+        return horaDespacho;
+    }
+
+    public void setHoraDespacho(String horaDespacho) {
+        this.horaDespacho = horaDespacho;
+    }
 
     public int getCodViagem() {
         return codViagem;

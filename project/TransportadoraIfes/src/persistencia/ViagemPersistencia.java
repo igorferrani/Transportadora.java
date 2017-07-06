@@ -5,6 +5,7 @@
  */
 package persistencia;
 
+import Model.Caminhao;
 import Model.Viagem;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,22 @@ import java.sql.Statement;
  */
 public class ViagemPersistencia {
     
+    public ResultSet selectDTRelatorioQtdViagemCaminhao(Caminhao caminhao, java.sql.Connection con) throws Exception{
+        try {            
+            String sql = "SELECT caminhao.codCaminhao, COUNT(*) AS quantidadeViagem, caminhao.numLicencaCaminhao, caminhao.qtdVolumeCaminhao, caminhao.qtdPesoCaminhao FROM viagem " +
+                         "INNER JOIN caminhao ON caminhao.codCaminhao = viagem.codCaminhao " +
+                         "WHERE viagem.codCaminhao = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setInt(1, caminhao.getCodCaminhao());
+            ResultSet rs = stmt.executeQuery();
+            return rs;
+        } catch (SQLException e){
+            throw new Exception("Error SQLException ("+this.getClass().getName()+"): " + e.getMessage());
+        } catch (Exception e){
+            throw new Exception("Error Exception ("+this.getClass().getName()+"): " + e.getMessage());
+        }
+    }
+            
     public ResultSet selectAllRecords(java.sql.Connection con) throws Exception{
         try {            
             String sql = "SELECT viagem.*, armazem.nomArmazem, caminhao.numLicencaCaminhao FROM viagem "
@@ -35,14 +52,17 @@ public class ViagemPersistencia {
     
     public int insertRecord(Viagem viagem, java.sql.Connection con) throws Exception{
         int codViagem = 0;
+        
+        System.out.println("data: " + viagem.getDataDespacho() + " " + viagem.getHoraDespacho());
         try {
-            String insertViagem = "INSERT INTO viagem VALUES(0, ?, ?, ?, ?, ?)";
+            String insertViagem = "INSERT INTO viagem VALUES(0, ?, ?, ?, ?, ?, ?, now())";
             PreparedStatement stmt = con.prepareStatement(insertViagem, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, viagem.getCodArmazem());
             stmt.setInt(2, viagem.getCodCaminhao());
             stmt.setString(3, viagem.getNumViagem());
             stmt.setDouble(4, 0);
             stmt.setDouble(5, 0);
+            stmt.setString(6, viagem.getDataDespacho() + " " + viagem.getHoraDespacho());
             stmt.executeUpdate();
             
             ResultSet generatedKeys = stmt.getGeneratedKeys();

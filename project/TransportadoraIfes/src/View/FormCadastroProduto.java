@@ -51,8 +51,6 @@ public class FormCadastroProduto extends javax.swing.JFrame {
         inputCliente = new javax.swing.JComboBox<>();
         inputArmazem = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        inputQtdInicial = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
         btnFecharJanela = new javax.swing.JButton();
         btnSalvarAlteracoes = new javax.swing.JButton();
 
@@ -80,8 +78,6 @@ public class FormCadastroProduto extends javax.swing.JFrame {
         jLabel3.setText("Cliente/Proprietário do produto");
 
         jLabel7.setText("Armazem de entrada");
-
-        jLabel4.setText("Qtd. inicial");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,15 +109,11 @@ public class FormCadastroProduto extends javax.swing.JFrame {
                                     .addComponent(inputVolumeLiquido, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(inputNomProduto))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(75, 75, 75))
-                                .addComponent(inputValorProduto))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel4)
-                                .addComponent(inputQtdInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(75, 75, 75))
+                            .addComponent(inputValorProduto))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -134,9 +126,9 @@ public class FormCadastroProduto extends javax.swing.JFrame {
                         .addGap(2, 2, 2)
                         .addComponent(inputNomProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(jLabel2)
                         .addGap(2, 2, 2)
-                        .addComponent(inputQtdInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -146,11 +138,7 @@ public class FormCadastroProduto extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGap(2, 2, 2)
-                        .addComponent(inputVolumeLiquido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(2, 2, 2)
-                        .addComponent(inputValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(inputVolumeLiquido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -208,10 +196,6 @@ public class FormCadastroProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void inputNomProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomProdutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_inputNomProdutoActionPerformed
-
     private void init(){
         setSelectCliente();
         setSelectArmazem();
@@ -249,7 +233,7 @@ public class FormCadastroProduto extends javax.swing.JFrame {
     private void btnSalvarAlteracoesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarAlteracoesActionPerformed
         // TODO add your handling code here:
         String nomProduto = inputNomProduto.getText();
-        int qtdInicial = (int) inputQtdInicial.getValue();
+        //int qtdInicial = (int) inputQtdInicial.getValue();
         int pesoLiquido = (int) inputPesoLiquido.getValue();
         int volumeLiquido = (int) inputVolumeLiquido.getValue();
         int valorProduto = (int) inputValorProduto.getValue();
@@ -267,7 +251,7 @@ public class FormCadastroProduto extends javax.swing.JFrame {
             
             Estoque estoque = new Estoque();
             estoque.setCodArmazem(inputArmazem.getItemAt(indexArmazem).getCodArmazem());
-            estoque.setQtdProduto(qtdInicial);
+            //estoque.setQtdProduto(qtdInicial);
             
             CtrlProduto ctrlcProduto = new CtrlProduto();
             ctrlcProduto.insertRecord(produto, estoque);
@@ -277,6 +261,10 @@ public class FormCadastroProduto extends javax.swing.JFrame {
             Util.showMessage("Preencha todos os campos");
         }
     }//GEN-LAST:event_btnSalvarAlteracoesActionPerformed
+
+    private void inputNomProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inputNomProdutoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_inputNomProdutoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -321,13 +309,11 @@ public class FormCadastroProduto extends javax.swing.JFrame {
     private javax.swing.JComboBox<Cliente> inputCliente;
     private javax.swing.JTextField inputNomProduto;
     private javax.swing.JSpinner inputPesoLiquido;
-    private javax.swing.JSpinner inputQtdInicial;
     private javax.swing.JSpinner inputValorProduto;
     private javax.swing.JSpinner inputVolumeLiquido;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
